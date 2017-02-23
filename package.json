@@ -1,0 +1,19 @@
+{
+  "name": "weatherbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "Katy DeCorah",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "git-sha": "^1.0.0",
+    "minimist": "^1.2.0",
+    "moment": "^2.17.1",
+    "request": "^2.79.0",
+    "underscore": "^1.8.3"
+  },
+  "bin": {
+    "weatherbot": "./bin/weatherbot.js",
+    "gitsha": "./bin/gitsha.js"
+  }
+}
