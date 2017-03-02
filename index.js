@@ -12,6 +12,20 @@ var long = process.env.Long || '-73.8712154';
 module.exports.weather = weather;
 function weather(event, callback) {
 
+  // Map Dark Sky icons with Slack emoji
+  var icons = {
+    'clear-day': ':sunny:',
+    'clear-night': ':crescent_moon:',
+    'partly-cloudy-day': ':partly_sunny:',
+    'partly-cloudy-night': ':partly_sunny:',
+    'cloudy': ':cloud:',
+    'rain': ':rain_cloud:',
+    'sleet': ':snow_cloud:',
+    'snow': ':snowflake:',
+    'wind': ':wind_blowing_face:',
+    'fog': ':fog:'
+  };
+
   var opts = {
     url: 'https://api.darksky.net/forecast/' + process.env.DarkSkySecretKey + '/' + lat + ',' + long,
     method: 'GET',
@@ -24,26 +38,43 @@ function weather(event, callback) {
     if (err) return callback(err);
     var data = JSON.parse(body);
     var hourly = data.hourly;
+    var current = data.currently;
     var precipitation = 0;
+    var itsNiceOut = false;
 
+    // Check if there will be snow over the next twelve hours
     for (var i = 0; i < 13; i++) {
       var hour = hourly.data[i];
-
       if (hour.precipType && hour.precipType == 'snow' && hour.precipAccumulation) {
         precipitation = precipitation + hour.precipAccumulation;
       }
     }
-
     precipitation = Math.ceil(precipitation * 100) / 100;
 
-    var message = 'We\'re expected to get *' + precipitation + ' inches* of snow over the next 12 hours. Park the cars good!';
+    // Check it it's currently nice out
+    if (current.temperature > 50 && current.temperature < 90 && current.precipProbability < .2) itsNiceOut = true;
 
     if (precipitation > 1) {
-      module.exports.post(channel, message, function(err, res) {
+      // --------------------
+      //  Park the cars good
+      // --------------------
+      var message = 'We\'re expected to get *' + precipitation + ' inches* of snow over the next 12 hours. Park the cars good!';
+      module.exports.post(channel, message, ':snowflake:', function(err, res) {
+        console.log(res);
+      });
+    } else if (itsNiceOut) {
+      // --------------------
+      //      Go outside
+      // --------------------
+      var message = 'It\'s ' + Math.round(current.temperature) + '℉. Go outside!';
+      module.exports.post(channel, message, icons[current.icon], function(err, res) {
         console.log(res);
       });
     } else {
-      console.log('No precipitation expected.');
+      // --------------------
+      //      Do nothing
+      // --------------------
+      console.log('No precipitation expected but also it\'s not that nice out.');
     }
   });
 }
@@ -58,12 +89,12 @@ function weather(event, callback) {
 * returns request body
 */
 module.exports.post = post;
-function post(channel, message, callback) {
+function post(channel, message, emoji, callback) {
 
   var json = {
     channel: channel,
     username: "WeatherBot",
-    icon_emoji: ":snowflake:",
+    icon_emoji: emoji,
     parse: "full",
     attachments: [
       {
