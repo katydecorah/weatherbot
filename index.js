@@ -1,5 +1,6 @@
 var request = require('request');
 var fs = require('fs');
+var moment = require('moment');
 
 // set your incoming webhook
 var slackURL = process.env.SlackHookURL;
@@ -51,7 +52,7 @@ function weather(event, callback) {
     }
     precipitation = Math.ceil(precipitation * 100) / 100;
 
-    // Check it it's currently nice out
+    // Check if it's currently nice out
     if (current.temperature > 50 && current.temperature < 90 && current.precipProbability < .2) itsNiceOut = true;
 
     if (precipitation > 1) {
@@ -70,11 +71,31 @@ function weather(event, callback) {
       module.exports.post(channel, message, icons[current.icon], function(err, res) {
         console.log(res);
       });
+    } else if (data.alerts) {
+      // --------------------
+      //      Alerts
+      // --------------------
+      var message = '';
+      var alertSeverity = [];
+      var alertEmoji = '';
+
+      data.alerts.forEach(function(alert) {
+        message += '*' + alert.title + '* from ' + moment.unix(alert.time).format('MM/DD h:mm A') + ' until ' + moment.unix(alert.expires).format('MM/DD h:mm A') + ' ' + alert.uri + '\n';
+        alertSeverity.push(alert.severity);
+      });
+
+      if (alertSeverity.indexOf('warning') > -1 ) alertEmoji = ':bangbang:';
+      else if (alertSeverity.indexOf('watch') > -1) alertEmoji = ':exclamation:';
+      else alertEmoji = ':grey_exclamation:';
+
+      module.exports.post(channel, message, alertEmoji, function(err, res) {
+        console.log(res);
+      });
     } else {
       // --------------------
       //      Do nothing
       // --------------------
-      console.log('No precipitation expected but also it\'s not that nice out.');
+      console.log('No precipitation expected, it\'s not that nice out, and there are no alerts.');
     }
   });
 }
