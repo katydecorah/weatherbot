@@ -55,6 +55,13 @@ function weather(event, callback) {
     // Check if it's currently nice out
     if (current.temperature > 50 && current.temperature < 90 && current.precipProbability < .2) itsNiceOut = true;
 
+    // Check if there are "warning" or "watch" severe weather alerts
+    if (data.alerts) {
+      var alerts = data.alerts.filter(function(f) {
+        if (f.severity !== 'advisory') return f;
+      });
+    }
+
     if (precipitation > 1) {
       // --------------------
       //  Park the cars good
@@ -71,7 +78,7 @@ function weather(event, callback) {
       module.exports.post(channel, message, icons[current.icon], function(err, res) {
         console.log(res);
       });
-    } else if (data.alerts) {
+    } else if (alerts && alerts.length > 0) {
       // --------------------
       //      Alerts
       // --------------------
@@ -79,8 +86,8 @@ function weather(event, callback) {
       var alertSeverity = [];
       var alertEmoji = '';
 
-      data.alerts.forEach(function(alert) {
-        message += '*' + alert.title + '* from ' + moment.unix(alert.time).format('MM/DD h:mm A') + ' until ' + moment.unix(alert.expires).format('MM/DD h:mm A') + ' ' + alert.uri + '\n';
+      alerts.forEach(function(alert) {
+        message += '*' + alert.title + '* from ' + moment.unix(alert.time).format('dddd (MM/DD) h:mm A') + ' until ' + moment.unix(alert.expires).format('dddd (MM/DD) h:mm A') + ' ' + alert.uri + '\n';
         alertSeverity.push(alert.severity);
       });
 
