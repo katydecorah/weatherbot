@@ -1,18 +1,22 @@
 #!/usr/bin/env node
 
-var weatherbot = require('../index.js');
-var argv = require('minimist')(process.argv.slice(2));
+const weatherbot = require('../index.js');
+const argv = require('minimist')(process.argv.slice(2));
 
-if (!argv.message || !argv.channel) {
-    console.log('Usage:   weatherbot --message=<lorem ipsum> --channel=<channel>');
-    console.log('Example: weatherbot --message=hello --channel=@katydecorah');
-    process.exit(1);
+if (!argv.channel && !argv.lat && !argv.long) {
+  console.log('Usage:   weatherbot --channel=<channel> --lat=<latitude> --long=<longitude>');
+  console.log('Example: weatherbot --channel=@katydecorah --lat=43.0833231 --long=-73.8712154');
+  process.exit(1);
 }
 
-weatherbot.post(argv.channel, argv.message, function(err, update) {
-    if (err) {
-        console.error(err);
-        process.exit(1);
-    }
-    console.log('Slack: posted to %s', argv.channel);
+process.env.SlackChannel = argv.channel;
+process.env.Lat = argv.lat;
+process.env.Long = argv.long;
+
+weatherbot.weather({}, null, (err, callback) => {
+  if (err) {
+    console.error(err);
+    process.exit(1);
+  }
+  console.log(callback);
 });

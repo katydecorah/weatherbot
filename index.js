@@ -1,20 +1,13 @@
-var request = require('request');
-var fs = require('fs');
-var moment = require('moment');
+'use strict';
 
-// set your incoming webhook
-var slackURL = process.env.SlackHookURL;
-// set your channel
-var channel = process.env.SlackChannel || '@katydecorah';
-// set your coordinates (lat,long)
-var lat = process.env.Lat || '43.0833231';
-var long = process.env.Long || '-73.8712154';
+const request = require('request');
+const moment = require('moment');
 
 module.exports.weather = weather;
-function weather(event, callback) {
+function weather(event, context, callback) {
 
-  // Map Dark Sky icons with Slack emoji
-  var icons = {
+  // Translate Dark Sky icons to Slack emoji
+  const icons = {
     'clear-day': ':sunny:',
     'clear-night': ':crescent_moon:',
     'partly-cloudy-day': ':partly_sunny:',
@@ -27,25 +20,26 @@ function weather(event, callback) {
     'fog': ':fog:'
   };
 
-  var opts = {
-    url: 'https://api.darksky.net/forecast/' + process.env.DarkSkySecretKey + '/' + lat + ',' + long,
+  const opts = {
+    url: 'https://api.darksky.net/forecast/' + process.env.DarkSkySecretKey + '/' + process.env.Lat + ',' + process.env.Long,
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
     }
   };
 
-  request(opts, function(err, res, body) {
+  request(opts, (err, res, body) => {
     if (err) return callback(err);
-    var data = JSON.parse(body);
-    var hourly = data.hourly;
-    var current = data.currently;
-    var precipitation = 0;
-    var itsNiceOut = false;
+    const data = JSON.parse(body);
+    const hourly = data.hourly;
+    const current = data.currently;
+    let precipitation = 0;
+    let itsNiceOut = false;
+    let alerts;
 
     // Check if there will be snow over the next twelve hours
-    for (var i = 0; i < 13; i++) {
-      var hour = hourly.data[i];
+    for (let i = 0; i < 13; i++) {
+      const hour = hourly.data[i];
       if (hour.precipType && hour.precipType == 'snow' && hour.precipAccumulation) {
         precipitation = precipitation + hour.precipAccumulation;
       }
@@ -55,9 +49,9 @@ function weather(event, callback) {
     // Check if it's currently nice out
     if (current.temperature > 50 && current.temperature < 90 && current.precipProbability < .2) itsNiceOut = true;
 
-    // Check if there are "warning" or "watch" severe weather alerts
+    // Check if there are 'warning' or 'watch' severe weather alerts
     if (data.alerts) {
-      var alerts = data.alerts.filter(function(f) {
+      alerts = data.alerts.filter((f) => {
         if (f.severity !== 'advisory') return f;
       });
     }
@@ -66,43 +60,37 @@ function weather(event, callback) {
       // --------------------
       //  Park the cars good
       // --------------------
-      var message = 'We\'re expected to get *' + precipitation + ' inches* of snow over the next 12 hours. Park the cars good!';
-      module.exports.post(channel, message, ':snowflake:', function(err, res) {
-        console.log(res);
-      });
+      let message = 'We\'re expected to get *' + precipitation + ' inches* of snow over the next 12 hours. Park the cars good!';
+      module.exports.post(message, ':snowflake:', callback);
     } else if (itsNiceOut) {
       // --------------------
       //      Go outside
       // --------------------
-      var message = 'It\'s ' + Math.round(current.temperature) + '℉. Go outside!';
-      module.exports.post(channel, message, icons[current.icon], function(err, res) {
-        console.log(res);
-      });
+      let message = 'It\'s ' + Math.round(current.temperature) + '℉. Go outside!';
+      module.exports.post(message, icons[current.icon], callback);
     } else if (alerts && alerts.length > 0) {
       // --------------------
       //      Alerts
       // --------------------
-      var message = '';
-      var alertSeverity = [];
-      var alertEmoji = '';
+      let message = '';
+      let alertSeverity = [];
+      let alertEmoji = '';
 
-      alerts.forEach(function(alert) {
+      alerts.forEach((alert) => {
         message += '*' + alert.title + '* from ' + moment.unix(alert.time).format('dddd (MM/DD) h:mm A') + ' until ' + moment.unix(alert.expires).format('dddd (MM/DD) h:mm A') + ' ' + alert.uri + '\n';
         alertSeverity.push(alert.severity);
       });
 
-      if (alertSeverity.indexOf('warning') > -1 ) alertEmoji = ':bangbang:';
+      if (alertSeverity.indexOf('warning') > -1) alertEmoji = ':bangbang:';
       else if (alertSeverity.indexOf('watch') > -1) alertEmoji = ':exclamation:';
       else alertEmoji = ':grey_exclamation:';
 
-      module.exports.post(channel, message, alertEmoji, function(err, res) {
-        console.log(res);
-      });
+      module.exports.post(message, alertEmoji, callback);
     } else {
       // --------------------
       //      Do nothing
       // --------------------
-      console.log('No precipitation expected, it\'s not that nice out, and there are no alerts.');
+      return callback(null, 'No snow expected, it\'s not that nice out, and there are no weather alerts.');
     }
   });
 }
@@ -111,32 +99,31 @@ function weather(event, callback) {
 * Posts weather message to slack webhook URL.
 *
 * @function post
-* @param {String} channel - Slack channel to post text to
 * @param {String} message - precipitation amount
 * @param {Callback} callback - if error, returns error message; otherwise,
 * returns request body
 */
 module.exports.post = post;
-function post(channel, message, emoji, callback) {
+function post(message, emoji, callback) {
 
-  var json = {
-    channel: channel,
-    username: "WeatherBot",
+  const json = {
+    channel: process.env.SlackChannel,
+    username: 'WeatherBot',
     icon_emoji: emoji,
-    parse: "full",
+    parse: 'full',
     attachments: [
       {
-        "fallback": "New message from WeatherBot!",
-        "text": message,
-        "mrkdwn_in": ["text"]
+        'fallback': 'New message from WeatherBot!',
+        'text': message,
+        'mrkdwn_in': ['text']
       }
     ]
   };
 
   request.post({
-    url: slackURL,
+    url: process.env.SlackHookURL,
     json: json
-  }, function(err, resp) {
+  }, (err, resp) => {
     if (err) return callback(err);
     if (resp.statusCode !== 200) return callback(new Error('Got HTTP status ' + resp.statusCode + ' from slack'));
     return callback(null, 'Posted to Slack.');

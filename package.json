@@ -1,19 +1,32 @@
 {
   "name": "weatherbot",
   "version": "1.0.0",
-  "description": "",
+  "description": "A Slack bot that gives you a heads up about snow, nice weather, and severe weather alerts",
   "main": "index.js",
   "author": "Katy DeCorah",
+  "engines": {
+    "node": "4.4.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/katydecorah/weatherbot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/katydecorah/weatherbot/issues"
+  },
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "license": "MIT",
   "dependencies": {
-    "fs": "0.0.1-security",
-    "git-sha": "^1.0.0",
+    "babel-eslint": "^7.2.3",
+    "eslint": "^3.19.0",
     "minimist": "^1.2.0",
     "moment": "^2.17.1",
-    "request": "^2.79.0",
+    "request": "^2.81.0",
     "underscore": "^1.8.3"
   },
   "bin": {
-    "weatherbot": "./bin/weatherbot.js",
-    "gitsha": "./bin/gitsha.js"
+    "weatherbot": "./bin/weatherbot.js"
   }
 }

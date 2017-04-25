@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Parameters" : {
+  "Parameters": {
     "GitSha": {
       "Type": "String",
       "Description": "GitSha to deploy"
@@ -30,7 +30,7 @@
       "Default": "-73.8712154"
     }
   },
-  "Resources" : {
+  "Resources": {
     "WeatherBotRole": {
       "Type": "AWS::IAM::Role",
       "Properties": {
@@ -92,14 +92,29 @@
             ]
           }
         },
-        "Role": { "Fn::GetAtt" : ["WeatherBotRole", "Arn"] },
+        "Role": {
+          "Fn::GetAtt": [
+            "WeatherBotRole",
+            "Arn"
+          ]
+        },
         "Environment": {
           "Variables": {
-            "SlackChannel": { "Ref": "SlackChannel" },
-            "DarkSkySecretKey": { "Ref": "DarkSkySecretKey" },
-            "Lat": { "Ref": "Lat" },
-            "Long": { "Ref": "Long" },
-            "SlackHookURL": { "Ref": "SlackHookURL" }
+            "SlackChannel": {
+              "Ref": "SlackChannel"
+            },
+            "DarkSkySecretKey": {
+              "Ref": "DarkSkySecretKey"
+            },
+            "Lat": {
+              "Ref": "Lat"
+            },
+            "Long": {
+              "Ref": "Long"
+            },
+            "SlackHookURL": {
+              "Ref": "SlackHookURL"
+            }
           }
         },
         "Description": "weather",
@@ -109,7 +124,6 @@
         "Timeout": 300
       }
     },
-
     "TriggerWeatherBotFunctionEveryDay": {
       "Type": "AWS::Events::Rule",
       "Properties": {
@@ -118,7 +132,12 @@
         "State": "ENABLED",
         "Targets": [
           {
-            "Arn": { "Fn::GetAtt": ["WeatherBotFunction", "Arn"]},
+            "Arn": {
+              "Fn::GetAtt": [
+                "WeatherBotFunction",
+                "Arn"
+              ]
+            },
             "Id": "TriggerWeatherBotFunctionEveryDay"
           }
         ]
@@ -128,9 +147,19 @@
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
-        "FunctionName": { "Fn::GetAtt": ["WeatherBotFunction", "Arn"]},
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "WeatherBotFunction",
+            "Arn"
+          ]
+        },
         "Principal": "events.amazonaws.com",
-        "SourceArn":{ "Fn::GetAtt": ["TriggerWeatherBotFunctionEveryDay", "Arn"]}
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "TriggerWeatherBotFunctionEveryDay",
+            "Arn"
+          ]
+        }
       }
     }
   }

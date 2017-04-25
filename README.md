@@ -6,7 +6,7 @@ A Slack bot that posts a message if:
 + It's nice out (temperature is between 50℉ and 90℉ and low probability of precipitation).
 * There are any weather alerts.
 
-This bot uses Slack API, Dark Sky API, and Amazon Web Services.
+This bot uses Slack API and Dark Sky API. I can also be run automatically with Amazon Web Services (AWS).
 
 Skycon | emoji
 -------|-------
@@ -34,3 +34,17 @@ Create a [Slack Webhook](https://api.slack.com/incoming-webhooks) and set the ur
 ```
 echo "export SlackHookURL=0000ffff0000ffff0000ffff0000ffff0000ffff" >> ~/.bash_profile
 ```
+
+## Run manually
+
+After you set up the environment, you can run WeatherBot from the command line.
+
+First run: `npm install` and `npm link`.
+
+And then you can run the command:
+
+```
+weatherbot --channel=<channel> --lat=<latitude> --long=<longitude>
+```
+
+Example: weatherbot --channel=@katydecorah --lat=43.0 --long=-73.8
