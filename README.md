@@ -1,4 +1,4 @@
-# Weather Bot
+# weatherbot [![Build Status](https://travis-ci.org/katydecorah/weatherbot.svg?branch=master)](https://travis-ci.org/katydecorah/weatherbot)
 
 A Slack bot that posts a message if:
 

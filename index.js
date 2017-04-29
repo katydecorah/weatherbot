@@ -1,7 +1,7 @@
 'use strict';
 
 const request = require('request');
-const moment = require('moment');
+const moment = require('moment-timezone');
 
 module.exports.weather = weather;
 function weather(event, context, callback) {
@@ -30,7 +30,7 @@ function weather(event, context, callback) {
 
   request(opts, (err, res, body) => {
     if (err) return callback(err);
-    const data = JSON.parse(body);
+    let data = process.env.WeatherJSON ? JSON.parse(process.env.WeatherJSON) : JSON.parse(body);
     const hourly = data.hourly;
     const current = data.currently;
     let precipitation = 0;
@@ -77,7 +77,7 @@ function weather(event, context, callback) {
       let alertEmoji = '';
 
       alerts.forEach((alert) => {
-        message += '*' + alert.title + '* from ' + moment.unix(alert.time).format('dddd (MM/DD) h:mm A') + ' until ' + moment.unix(alert.expires).format('dddd (MM/DD) h:mm A') + ' ' + alert.uri + '\n';
+        message += '*' + alert.title + '* from ' + moment.unix(alert.time).tz(data.timezone).format('dddd (MM/DD) h:mm A') + ' until ' + moment.unix(alert.expires).tz(data.timezone).format('dddd (MM/DD) h:mm A') + ' ' + alert.uri + '\n';
         alertSeverity.push(alert.severity);
       });
 

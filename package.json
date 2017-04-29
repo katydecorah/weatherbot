@@ -15,7 +15,8 @@
     "url": "https://github.com/katydecorah/weatherbot/issues"
   },
   "scripts": {
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "tape test/*.js"
   },
   "license": "MIT",
   "dependencies": {
@@ -23,7 +24,9 @@
     "eslint": "^3.19.0",
     "minimist": "^1.2.0",
     "moment": "^2.17.1",
+    "moment-timezone": "^0.5.13",
     "request": "^2.81.0",
+    "tape": "^4.6.3",
     "underscore": "^1.8.3"
   },
   "bin": {
