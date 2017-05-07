@@ -111,13 +111,8 @@ function post(message, emoji, callback) {
     username: 'WeatherBot',
     icon_emoji: emoji,
     parse: 'full',
-    attachments: [
-      {
-        'fallback': 'New message from WeatherBot!',
-        'text': message,
-        'mrkdwn_in': ['text']
-      }
-    ]
+    text: message,
+    markdown: true
   };
 
   request.post({
