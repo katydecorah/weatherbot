@@ -46,8 +46,18 @@ function weather(event, context, callback) {
     }
     precipitation = Math.ceil(precipitation * 100) / 100;
 
+    const coolerMonths = [1, 2, 3, 4, 12];
+
     // Check if it's currently nice out
-    if (current.temperature > 50 && current.temperature < 90 && current.precipProbability < .2) itsNiceOut = true;
+    if (current.temperature < 90 && current.precipProbability < .2) {
+      if (coolerMonths.indexOf(moment().format('M')) !== -1) {
+        // cooler months
+        if (current.temperature >= 50) itsNiceOut = true;
+      } else {
+        // warmer months
+        if (current.temperature >= 60) itsNiceOut = true;
+      }
+    }
 
     // Check if there are 'warning' or 'watch' severe weather alerts
     if (data.alerts) {
