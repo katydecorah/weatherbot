@@ -4,8 +4,12 @@ const weatherbot = require('../index.js');
 const argv = require('minimist')(process.argv.slice(2));
 
 if (!argv.channel && !argv.lat && !argv.long) {
-  console.log('Usage:   weatherbot --channel=<channel> --lat=<latitude> --long=<longitude>');
-  console.log('Example: weatherbot --channel=@katydecorah --lat=43.0833231 --long=-73.8712154');
+  console.log(
+    'Usage:   weatherbot --channel=<channel> --lat=<latitude> --long=<longitude>'
+  );
+  console.log(
+    'Example: weatherbot --channel=@katydecorah --lat=43.0833231 --long=-73.8712154'
+  );
   process.exit(1);
 }
 

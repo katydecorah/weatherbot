@@ -3,7 +3,7 @@
 A Slack bot that posts a message if:
 
 + There will be snow (more than one inch of snow over the next twelve hours).
-+ It's nice out (temperature is between 50/60℉ and 90℉ and low probability of precipitation).
++ It's nice out (temperature is between 50/60℉ and 80℉ and low probability of precipitation).
 * There are any weather alerts.
 
 This bot uses Slack API and Dark Sky API. I can also be run automatically with Amazon Web Services (AWS).

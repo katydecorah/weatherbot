@@ -5,7 +5,7 @@
   "main": "index.js",
   "author": "Katy DeCorah",
   "engines": {
-    "node": "4.4.3"
+    "node": "6.10.3"
   },
   "repository": {
     "type": "git",
@@ -16,20 +16,33 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "test": "tape test/*.js"
+    "test": "tape test/*.js",
+    "precommit": "lint-staged"
   },
   "license": "MIT",
   "dependencies": {
     "babel-eslint": "^7.2.3",
     "eslint": "^3.19.0",
     "minimist": "^1.2.0",
-    "moment": "^2.17.1",
-    "moment-timezone": "^0.5.13",
-    "request": "^2.81.0",
-    "tape": "^4.6.3",
+    "moment": "^2.19.2",
+    "moment-timezone": "^0.5.14",
+    "request": "^2.83.0",
+    "tape": "^4.8.0",
     "underscore": "^1.8.3"
   },
   "bin": {
     "weatherbot": "./bin/weatherbot.js"
+  },
+  "devDependencies": {
+    "husky": "^0.14.3",
+    "lint-staged": "^6.0.0",
+    "prettier": "^1.8.2"
+  },
+  "lint-staged": {
+    "**/*.js": [
+      "eslint",
+      "prettier --single-quote --write",
+      "git add"
+    ]
   }
 }
