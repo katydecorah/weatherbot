@@ -7,11 +7,10 @@ const moment = require('moment-timezone');
 const weather = (event, context, callback) => {
   module.exports
     .getWeather()
-    .catch(err => callback(err))
     .then(module.exports.getMessage)
     .then(module.exports.post)
-    .catch(err => callback(err))
-    .then(data => callback(null, data));
+    .then(data => callback(null, data))
+    .catch(err => callback(err));
 };
 
 const getWeather = () => {
