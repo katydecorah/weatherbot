@@ -8,7 +8,13 @@ const weather = (event, context, callback) => {
   module.exports
     .getWeather()
     .then(module.exports.getMessage)
-    .then(module.exports.post)
+    .then(messages => {
+      return Promise.all(
+        messages.map(message => {
+          return module.exports.post(message);
+        })
+      );
+    })
     .then(data => callback(null, data))
     .catch(err => callback(err));
 };
@@ -169,6 +175,7 @@ const getAlertDetails = (alerts, data) => {
 
 const getMessage = data => {
   return new Promise(resolve => {
+    const messages = [];
     // is it snowing?
     const precipitation = module.exports.getPrecipitation(data.hourly);
     // is it nice out?
@@ -176,9 +183,11 @@ const getMessage = data => {
     // are there weather alerts?
     const alerts = module.exports.getAlerts(data);
 
-    if (precipitation && precipitation.message) resolve(precipitation);
-    else if (itsNiceOut && itsNiceOut.message) resolve(itsNiceOut);
-    else if (alerts && alerts.message) resolve(alerts);
+    if (precipitation && precipitation.message) messages.push(precipitation);
+    else if (itsNiceOut && itsNiceOut.message) messages.push(itsNiceOut);
+    else if (alerts && alerts.message) messages.push(alerts);
+
+    if (messages.length) resolve(messages);
     else resolve(null);
   });
 };
