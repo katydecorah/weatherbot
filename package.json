@@ -28,7 +28,7 @@
     "moment-timezone": "^0.5.27",
     "request": "^2.85.0",
     "tape": "^4.12.1",
-    "underscore": "^1.9.0"
+    "underscore": "^1.12.1"
   },
   "bin": {
     "weatherbot": "./bin/weatherbot.js"
