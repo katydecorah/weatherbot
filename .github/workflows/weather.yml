@@ -1,0 +1,17 @@
+on: push
+
+jobs:
+  weather_update:
+    runs-on: macOS-latest
+    name: Weather
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Weather
+        uses: ./
+        with:
+          Latitude: 43.0616993
+          Longitude: -73.8069372
+          DarkSekySecretKey: ${{ secrets.DarkSekySecretKey }}
+          SlackChannel: "@katydecorah"
+          SlackWebHookUrl: ${{ secrets.SlackWebHookUrl }}
