@@ -21,6 +21,7 @@ This bot uses Slack API and Dark Sky API.
 | wind                | 🌬     |
 | fog                 | 🌫     |
 
+To enable emoji, add the `chat:write.customize` scope to your Slack app. [More](https://stackoverflow.com/a/53200237)
 
 <!-- START GENERATED DOCUMENTATION -->
 
