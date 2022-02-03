@@ -22,13 +22,11 @@ export default async function post({
   if (!text)
     return "No snow expected, it's not that nice out, and there are no weather alerts.";
   try {
-    const response = await fetch(`${SlackWebHookUrl}`, {
-      method: "POST",
-      ...json,
+    await fetch(`${SlackWebHookUrl}`, {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(json),
     });
-    const data = (await response.json()) as { statusCode: number };
-    if (data.statusCode == 200) return "Posted to Slack";
-    else throw new Error(`${data}`);
   } catch (error) {
     throw new Error(error);
   }

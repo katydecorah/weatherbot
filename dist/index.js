@@ -8849,12 +8849,11 @@ function post({ icon_emoji, text, }) {
         if (!text)
             return "No snow expected, it's not that nice out, and there are no weather alerts.";
         try {
-            const response = yield fetch(`${SlackWebHookUrl}`, Object.assign({ method: "POST" }, json));
-            const data = (yield response.json());
-            if (data.statusCode == 200)
-                return "Posted to Slack";
-            else
-                throw new Error(`${data}`);
+            yield fetch(`${SlackWebHookUrl}`, {
+                method: "post",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(json)
+            });
         }
         catch (error) {
             throw new Error(error);
