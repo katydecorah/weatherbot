@@ -54,7 +54,7 @@ jobs:
 
 - `Longitude`: Required. The longitude of where you want to return the weather.
 
-- `DarkSkySecretKey`: Required. undefined
+- `DarkSkySecretKey`: Required. Your Dark Sky secrety key. Use a respository secret https://docs.github.com/en/actions/security-guides/encrypted-secrets
 
 - `SlackChannel`: Required. The Slack channel to post the weather status.
 
