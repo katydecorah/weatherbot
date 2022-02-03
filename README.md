@@ -45,7 +45,6 @@ jobs:
           Latitude: 43.0616993
           Longitude: -73.8069372
           DarkSkySecretKey: ${{ secrets.DarkSkySecretKey }}
-          SlackChannel: "@katydecorah"
           SlackWebHookUrl: ${{ secrets.SlackWebHookUrl }}
 ```
 
@@ -56,8 +55,6 @@ jobs:
 - `Longitude`: Required. The longitude of where you want to return the weather.
 
 - `DarkSkySecretKey`: Required. Your Dark Sky secrety key. Use a respository secret https://docs.github.com/en/actions/security-guides/encrypted-secrets
-
-- `SlackChannel`: Required. The Slack channel to post the weather status.
 
 - `SlackWebHookUrl`: Required. Your Slack webhook URL. Use a respository secret https://docs.github.com/en/actions/security-guides/encrypted-secrets
 
