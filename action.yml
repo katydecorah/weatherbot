@@ -14,9 +14,6 @@ inputs:
   DarkSkySecretKey:
     description: Your Dark Sky secrety key. Use a respository secret https://docs.github.com/en/actions/security-guides/encrypted-secrets
     required: true
-  SlackChannel:
-    description: The Slack channel to post the weather status.
-    required: true
   SlackWebHookUrl:
     description: Your Slack webhook URL. Use a respository secret https://docs.github.com/en/actions/security-guides/encrypted-secrets
     required: true

@@ -8838,7 +8838,6 @@ var post_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arg
 function post({ icon_emoji, text, }) {
     return post_awaiter(this, void 0, void 0, function* () {
         const json = {
-            channel: (0,core.getInput)("SlackChannel"),
             username: "WeatherBot",
             icon_emoji,
             parse: "full",
@@ -8851,8 +8850,8 @@ function post({ icon_emoji, text, }) {
         try {
             yield fetch(`${SlackWebHookUrl}`, {
                 method: "post",
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(json)
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(json),
             });
         }
         catch (error) {

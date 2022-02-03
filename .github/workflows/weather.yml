@@ -13,5 +13,4 @@ jobs:
           Latitude: 43.0616993
           Longitude: -73.8069372
           DarkSkySecretKey: ${{ secrets.DarkSkySecretKey }}
-          SlackChannel: "@katydecorah"
           SlackWebHookUrl: ${{ secrets.SlackWebHookUrl }}

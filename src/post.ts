@@ -9,7 +9,6 @@ export default async function post({
   text: string;
 }) {
   const json = {
-    channel: getInput("SlackChannel"),
     username: "WeatherBot",
     icon_emoji,
     parse: "full",
