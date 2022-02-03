@@ -8882,6 +8882,7 @@ function weather() {
         try {
             const currentWeather = yield getWeather();
             const message = getMessage(currentWeather);
+            (0,core.info)(`message: ${JSON.stringify(message, null, 2)}`);
             if (message)
                 yield post(message);
         }
