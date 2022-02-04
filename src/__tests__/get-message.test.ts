@@ -49,6 +49,14 @@ describe("getMessage", () => {
       Array [
         Object {
           "text": Object {
+            "text": ":bangbang: *<https://alerts.weather.gov/cap/wwacapget.php?x=CO12584B430174.WinterStormWarning.12584B528040CO.PUBWSWPUB.4699429342326a6b57f552fae35b1fa6|Winter Storm Warning>*
+      Saturday 6:45 AM until Sunday 8:00 AM",
+            "type": "mrkdwn",
+          },
+          "type": "section",
+        },
+        Object {
+          "text": Object {
             "text": "*Snow (4–7 in.) until tomorrow morning.*
       The estimated snow accumulation is 4.6\\":
 
@@ -65,14 +73,6 @@ describe("getMessage", () => {
       :snowflake: 10 PM	0.3\\" 27℉
       :snowflake: 11 PM	0.3\\" 26℉
       :snowflake: 12 AM	0.3\\" 25℉",
-            "type": "mrkdwn",
-          },
-          "type": "section",
-        },
-        Object {
-          "text": Object {
-            "text": ":bangbang: *<https://alerts.weather.gov/cap/wwacapget.php?x=CO12584B430174.WinterStormWarning.12584B528040CO.PUBWSWPUB.4699429342326a6b57f552fae35b1fa6|Winter Storm Warning>*
-      Saturday 6:45 AM until Sunday 8:00 AM",
             "type": "mrkdwn",
           },
           "type": "section",
