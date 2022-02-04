@@ -30,10 +30,9 @@ export function getPrecipitation(hourly: Interval) {
   return [
     {
       type: "section",
-      fields: [
-        {
-          type: "mrkdwn",
-          text: `*${hourly.summary}*
+      text: {
+        type: "mrkdwn",
+        text: `:snowflake: *${hourly.summary}*
 The estimated snow accumulation is ${precipitation.toFixed(1)}":
 
 ${data
@@ -41,12 +40,7 @@ ${data
     (hour) => `${unixToHour(hour.time)}\t${hour.precipAccumulation.toFixed(1)}"`
   )
   .join("\n")}`,
-        },
-        {
-          type: "mrkdwn",
-          text: ":snowflake:",
-        },
-      ],
+      },
     },
   ];
 }
@@ -70,16 +64,13 @@ export function checkItsNiceOut(current: Currently) {
   return [
     {
       type: "section",
-      fields: [
-        {
-          type: "mrkdwn",
-          text: `It's ${Math.round(current.temperature)}℉. Go outside!`,
-        },
-        {
-          type: "mrkdwn",
-          text: getIcon(current.icon),
-        },
-      ],
+      text: {
+        type: "mrkdwn",
+        text: `${getIcon(current.icon)} **It's ${Math.round(
+          current.temperature
+        )}℉**
+Go outside!`,
+      },
     },
   ];
 }
@@ -122,25 +113,21 @@ export function getAlerts(alerts: Alerts[]) {
   if (!alerts) return [];
   const filtered = alerts.filter((f) => f.severity !== "advisory");
   if (filtered.length === 0) return [];
-  return [
-    {
-      type: "section",
-      fields: filtered.reduce((arr, alert) => {
-        const { start, end } = eventRange(alert.time, alert.expires);
-        return [
-          ...arr,
-          {
-            type: "mrkdwn",
-            text: `*<${alert.uri}|${alert.title}>*\n${start} until ${end}`,
-          },
-          {
-            type: "mrkdwn",
-            text: getIcon(alert.severity),
-          },
-        ];
-      }, []),
-    },
-  ];
+  return filtered.reduce((arr, alert) => {
+    const { start, end } = eventRange(alert.time, alert.expires);
+    return [
+      ...arr,
+      {
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: `${getIcon(alert.severity)} *<${alert.uri}|${
+            alert.title
+          }>*\n${start} until ${end}`,
+        },
+      },
+    ];
+  }, []);
 }
 
 export function getIcon(icon_emoji: string) {

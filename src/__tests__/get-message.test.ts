@@ -12,26 +12,19 @@ describe("getMessage", () => {
     expect(getMessage(alert)).toMatchInlineSnapshot(`
       Array [
         Object {
-          "fields": Array [
-            Object {
-              "text": "*<https://alerts.weather.gov/cap/wwacapget.php?x=MO12584B4351EC.FlashFloodWarning.12584B440D08MO.SGFFFSSGF.871ed93fdad70eafa96a72b70c339adb|Flash Flood Warning>*
+          "text": Object {
+            "text": ":bangbang: *<https://alerts.weather.gov/cap/wwacapget.php?x=MO12584B4351EC.FlashFloodWarning.12584B440D08MO.SGFFFSSGF.871ed93fdad70eafa96a72b70c339adb|Flash Flood Warning>*
       Saturday 8:51 AM until 1:30 PM",
-              "type": "mrkdwn",
-            },
-            Object {
-              "text": ":bangbang:",
-              "type": "mrkdwn",
-            },
-            Object {
-              "text": "*<https://alerts.weather.gov/cap/wwacapget.php?x=MO12584B42AD14.FlashFloodWatch.12584F8C0B40MO.SGFFFASGF.baa9e79367797852476837c777d55f8e|Flash Flood Watch>*
+            "type": "mrkdwn",
+          },
+          "type": "section",
+        },
+        Object {
+          "text": Object {
+            "text": ":exclamation: *<https://alerts.weather.gov/cap/wwacapget.php?x=MO12584B42AD14.FlashFloodWatch.12584F8C0B40MO.SGFFFASGF.baa9e79367797852476837c777d55f8e|Flash Flood Watch>*
       Saturday 4:29 AM until Sunday 8:00 PM",
-              "type": "mrkdwn",
-            },
-            Object {
-              "text": ":exclamation:",
-              "type": "mrkdwn",
-            },
-          ],
+            "type": "mrkdwn",
+          },
           "type": "section",
         },
       ]
@@ -41,16 +34,11 @@ describe("getMessage", () => {
     expect(getMessage(success)).toMatchInlineSnapshot(`
       Array [
         Object {
-          "fields": Array [
-            Object {
-              "text": "It's 71℉. Go outside!",
-              "type": "mrkdwn",
-            },
-            Object {
-              "text": ":cloud:",
-              "type": "mrkdwn",
-            },
-          ],
+          "text": Object {
+            "text": ":cloud: **It's 71℉**
+      Go outside!",
+            "type": "mrkdwn",
+          },
           "type": "section",
         },
       ]
@@ -60,9 +48,8 @@ describe("getMessage", () => {
     expect(getMessage(snow)).toMatchInlineSnapshot(`
       Array [
         Object {
-          "fields": Array [
-            Object {
-              "text": "*Snow (4–7 in.) until tomorrow morning.*
+          "text": Object {
+            "text": ":snowflake: *Snow (4–7 in.) until tomorrow morning.*
       The estimated snow accumulation is 4.6\\":
 
       12 PM	0.5\\"
@@ -78,27 +65,16 @@ describe("getMessage", () => {
       10 PM	0.3\\"
       11 PM	0.3\\"
       12 AM	0.3\\"",
-              "type": "mrkdwn",
-            },
-            Object {
-              "text": ":snowflake:",
-              "type": "mrkdwn",
-            },
-          ],
+            "type": "mrkdwn",
+          },
           "type": "section",
         },
         Object {
-          "fields": Array [
-            Object {
-              "text": "*<https://alerts.weather.gov/cap/wwacapget.php?x=CO12584B430174.WinterStormWarning.12584B528040CO.PUBWSWPUB.4699429342326a6b57f552fae35b1fa6|Winter Storm Warning>*
+          "text": Object {
+            "text": ":bangbang: *<https://alerts.weather.gov/cap/wwacapget.php?x=CO12584B430174.WinterStormWarning.12584B528040CO.PUBWSWPUB.4699429342326a6b57f552fae35b1fa6|Winter Storm Warning>*
       Saturday 6:45 AM until Sunday 8:00 AM",
-              "type": "mrkdwn",
-            },
-            Object {
-              "text": ":bangbang:",
-              "type": "mrkdwn",
-            },
-          ],
+            "type": "mrkdwn",
+          },
           "type": "section",
         },
       ]
