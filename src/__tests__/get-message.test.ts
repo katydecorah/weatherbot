@@ -56,6 +56,9 @@ describe("getMessage", () => {
           "type": "section",
         },
         Object {
+          "type": "divider",
+        },
+        Object {
           "text": Object {
             "text": "*Snow (4–7 in.) until tomorrow morning.*
       The estimated snow accumulation is 4.6\\":
