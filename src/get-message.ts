@@ -37,7 +37,10 @@ The estimated snow accumulation is ${precipitation.toFixed(1)}":
 
 ${data
   .map(
-    (hour) => `${unixToHour(hour.time)}\t${hour.precipAccumulation.toFixed(1)}"`
+    (hour) =>
+      `${unixToHour(hour.time)}\t${hour.precipAccumulation.toFixed(
+        1
+      )}" ${hour.temperature.toFixed(0)}℉`
   )
   .join("\n")}`,
       },

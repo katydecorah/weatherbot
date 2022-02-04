@@ -13062,7 +13062,7 @@ function getPrecipitation(hourly) {
 The estimated snow accumulation is ${precipitation.toFixed(1)}":
 
 ${data
-                    .map((hour) => `${unixToHour(hour.time)}\t${hour.precipAccumulation.toFixed(1)}"`)
+                    .map((hour) => `${unixToHour(hour.time)}\t${hour.precipAccumulation.toFixed(1)}" ${hour.temperature}℉`)
                     .join("\n")}`,
             },
         },
