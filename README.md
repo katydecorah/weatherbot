@@ -62,4 +62,6 @@ jobs:
 
 - `SlackWebHookUrl`: Required. Your Slack webhook URL. Use a respository secret https://docs.github.com/en/actions/security-guides/encrypted-secrets
 
+- `Timezone`: Your timezone. Default: `America/New_York`.
+
 <!-- END GENERATED DOCUMENTATION -->
