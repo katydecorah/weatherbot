@@ -17,26 +17,24 @@ export function getPrecipitation(hourly: Interval) {
       return precipitation;
     }
   }, 0);
-
-  return precipitation > 1
-    ? [
+  if (precipitation < 1) return [];
+  return [
+    {
+      type: "section",
+      fields: [
         {
-          type: "section",
-          fields: [
-            {
-              type: "mrkdwn",
-              text: `*${
-                Math.ceil(precipitation * 100) / 100
-              } inches of snow*\nover the next 12 hours`,
-            },
-            {
-              type: "mrkdwn",
-              text: ":snowflake:",
-            },
-          ],
+          type: "mrkdwn",
+          text: `*${
+            Math.ceil(precipitation * 100) / 100
+          } inches of snow*\nover the next 12 hours`,
         },
-      ]
-    : [];
+        {
+          type: "mrkdwn",
+          text: ":snowflake:",
+        },
+      ],
+    },
+  ];
 }
 
 export function checkItsNiceOut(current: Currently) {
@@ -54,23 +52,22 @@ export function checkItsNiceOut(current: Currently) {
       if (current.temperature >= 60) itsNiceOut = true;
     }
   }
-  return itsNiceOut
-    ? [
+  if (!itsNiceOut) return [];
+  return [
+    {
+      type: "section",
+      fields: [
         {
-          type: "section",
-          fields: [
-            {
-              type: "mrkdwn",
-              text: `It's ${Math.round(current.temperature)}℉. Go outside!`,
-            },
-            {
-              type: "mrkdwn",
-              text: getIcon(current.icon),
-            },
-          ],
+          type: "mrkdwn",
+          text: `It's ${Math.round(current.temperature)}℉. Go outside!`,
         },
-      ]
-    : [];
+        {
+          type: "mrkdwn",
+          text: getIcon(current.icon),
+        },
+      ],
+    },
+  ];
 }
 
 function formatTime(unix: number, next = "") {

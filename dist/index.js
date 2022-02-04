@@ -13046,23 +13046,23 @@ function getPrecipitation(hourly) {
             return precipitation;
         }
     }, 0);
-    return precipitation > 1
-        ? [
-            {
-                type: "section",
-                fields: [
-                    {
-                        type: "mrkdwn",
-                        text: `*${Math.ceil(precipitation * 100) / 100} inches of snow*\nover the next 12 hours`,
-                    },
-                    {
-                        type: "mrkdwn",
-                        text: ":snowflake:",
-                    },
-                ],
-            },
-        ]
-        : [];
+    if (precipitation < 1)
+        return [];
+    return [
+        {
+            type: "section",
+            fields: [
+                {
+                    type: "mrkdwn",
+                    text: `*${Math.ceil(precipitation * 100) / 100} inches of snow*\nover the next 12 hours`,
+                },
+                {
+                    type: "mrkdwn",
+                    text: ":snowflake:",
+                },
+            ],
+        },
+    ];
 }
 function checkItsNiceOut(current) {
     const coolerMonths = [0, 1, 2, 3, 11];
@@ -13082,23 +13082,23 @@ function checkItsNiceOut(current) {
                 itsNiceOut = true;
         }
     }
-    return itsNiceOut
-        ? [
-            {
-                type: "section",
-                fields: [
-                    {
-                        type: "mrkdwn",
-                        text: `It's ${Math.round(current.temperature)}℉. Go outside!`,
-                    },
-                    {
-                        type: "mrkdwn",
-                        text: getIcon(current.icon),
-                    },
-                ],
-            },
-        ]
-        : [];
+    if (!itsNiceOut)
+        return [];
+    return [
+        {
+            type: "section",
+            fields: [
+                {
+                    type: "mrkdwn",
+                    text: `It's ${Math.round(current.temperature)}℉. Go outside!`,
+                },
+                {
+                    type: "mrkdwn",
+                    text: getIcon(current.icon),
+                },
+            ],
+        },
+    ];
 }
 function formatTime(unix, next = "") {
     const messageFormat = new Intl.DateTimeFormat("en-US", {
