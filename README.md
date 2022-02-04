@@ -1,50 +1,65 @@
-# weatherbot [![Build Status](https://travis-ci.org/katydecorah/weatherbot.svg?branch=master)](https://travis-ci.org/katydecorah/weatherbot)
+# weatherbot
 
-A Slack bot that posts a message if:
+A GitHub action that posts weather announcements to Slack, if:
 
-+ There will be snow (more than one inch of snow over the next twelve hours).
-+ It's nice out (temperature is between 50/60℉ and 80℉ and low probability of precipitation).
-* There are any weather alerts.
+- There will be snow (more than one inch of snow over the next twelve hours).
+- It's nice out (temperature is between 50/60℉ and 80℉ and low probability of precipitation).
+- There are any weather warnings or watches.
 
-This bot uses Slack API and Dark Sky API. I can also be run automatically with Amazon Web Services (AWS).
+This bot uses the Slack and Dark Sky APIs.
 
-Skycon | emoji
--------|-------
-clear-day | ☀️
-clear-night | 🌙
-partly-cloudy-day | ⛅️
-partly-cloudy-night | ⛅️
-cloudy | ☁️
-rain | 🌧
-sleet | 🌨
-snow | ❄️
-wind | 🌬
-fog | 🌫
+| Skycon              | emoji |
+| ------------------- | ----- |
+| clear-day           | ☀️    |
+| clear-night         | 🌙    |
+| partly-cloudy-day   | ⛅️   |
+| partly-cloudy-night | ⛅️   |
+| cloudy              | ☁️    |
+| rain                | 🌧     |
+| sleet               | 🌨     |
+| snow                | ❄️    |
+| wind                | 🌬     |
+| fog                 | 🌫     |
 
-## Set up
+<!-- START GENERATED DOCUMENTATION -->
 
-Create a [Dark Sky account](https://darksky.net/dev/) and set token as environment variable:
+## Set up the workflow
 
+To use this action, create a new workflow in `.github/workflows` and modify it as needed:
+
+```yml
+name: Weatherbot
+
+on:
+  schedule:
+    - cron: "0 0,12,18 * * *"
+
+jobs:
+  weather_update:
+    runs-on: macOS-latest
+    name: Weather
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Weather
+        uses: katydecorah/weatherbot@v1.0.0
+        with:
+          Latitude: ${{ secrets.Latitude }}
+          Longitude: ${{ secrets.Longitude }}
+          DarkSkySecretKey: ${{ secrets.DarkSkySecretKey }}
+          SlackWebHookUrl: ${{ secrets.SlackWebHookUrl }}
 ```
-echo "export DarkSkySecretKey=0000ffff0000ffff0000ffff0000ffff0000ffff" >> ~/.bash_profile
-```
 
-Create a [Slack Webhook](https://api.slack.com/incoming-webhooks) and set the url as environment variable:
+## Action options
 
-```
-echo "export SlackHookURL=0000ffff0000ffff0000ffff0000ffff0000ffff" >> ~/.bash_profile
-```
+- `Latitude`: Required. The latitude of where you want to return the weather.
 
-## Run manually
+- `Longitude`: Required. The longitude of where you want to return the weather.
 
-After you set up the environment, you can run WeatherBot from the command line.
+- `DarkSkySecretKey`: Required. Your Dark Sky secrety key. Use a respository secret https://docs.github.com/en/actions/security-guides/encrypted-secrets
 
-First run: `npm install` and `npm link`.
+- `SlackWebHookUrl`: Required. Your Slack webhook URL. Use a respository secret https://docs.github.com/en/actions/security-guides/encrypted-secrets
 
-And then you can run the command:
+- `Timezone`: Your timezone. Default: `America/New_York`.
 
-```
-weatherbot --channel=<channel> --lat=<latitude> --long=<longitude>
-```
-
-Example: weatherbot --channel=@katydecorah --lat=43.0 --long=-73.8
+<!-- END GENERATED DOCUMENTATION -->

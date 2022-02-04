@@ -1,0 +1,20 @@
+name: Weatherbot
+
+on:
+  schedule:
+    - cron: "0 0,12,18 * * *"
+
+jobs:
+  weather_update:
+    runs-on: macOS-latest
+    name: Weather
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Weather
+        uses: ./
+        with:
+          Latitude: ${{ secrets.Latitude }}
+          Longitude: ${{ secrets.Longitude }}
+          DarkSkySecretKey: ${{ secrets.DarkSkySecretKey }}
+          SlackWebHookUrl: ${{ secrets.SlackWebHookUrl }}
