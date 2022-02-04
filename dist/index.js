@@ -13100,34 +13100,57 @@ function checkItsNiceOut(current) {
         ]
         : [];
 }
-function formatTime(unix) {
-    const dtFormat = new Intl.DateTimeFormat("en-US", {
-        timeStyle: "short",
-        dateStyle: "short",
+function formatTime(unix, next = '') {
+    const messageFormat = new Intl.DateTimeFormat("en-US", {
+        hour: "numeric",
+        minute: "numeric",
+        weekday: "long",
         timeZone: "America/New_York",
     });
-    return dtFormat.format(new Date(unix * 1e3));
+    const dayFormat = new Intl.DateTimeFormat("en-US", {
+        weekday: "long",
+        timeZone: "America/New_York",
+    });
+    const day = dayFormat.format(new Date(unix * 1e3));
+    const timeFormat = new Intl.DateTimeFormat("en-US", {
+        hour: "numeric",
+        minute: "numeric",
+        timeZone: "America/New_York",
+    });
+    return {
+        message: next === day ? timeFormat.format(new Date(unix * 1e3)) : messageFormat.format(new Date(unix * 1e3)),
+        day
+    };
+}
+function eventRange(start, end) {
+    return {
+        start: formatTime(start).message,
+        end: formatTime(end, formatTime(start).day).message
+    };
 }
 function getAlerts(alerts) {
     if (!alerts)
         return [];
-    const filtered = alerts.filter(f => f.severity !== 'advisory');
+    const filtered = alerts.filter((f) => f.severity !== "advisory");
     if (filtered.length === 0)
         return [];
     return [
         {
             type: "section",
-            fields: filtered.reduce((arr, alert) => [
-                ...arr,
-                {
-                    type: "mrkdwn",
-                    text: `*<${alert.uri}|${alert.title}>*\n${formatTime(alert.time)} until ${formatTime(alert.expires)}`,
-                },
-                {
-                    type: "mrkdwn",
-                    text: getIcon(alert.severity),
-                },
-            ], []),
+            fields: filtered.reduce((arr, alert) => {
+                const { start, end } = eventRange(alert.time, alert.expires);
+                return [
+                    ...arr,
+                    {
+                        type: "mrkdwn",
+                        text: `*<${alert.uri}|${alert.title}>*\n${start} until ${end}`,
+                    },
+                    {
+                        type: "mrkdwn",
+                        text: getIcon(alert.severity),
+                    },
+                ];
+            }, []),
         },
     ];
 }

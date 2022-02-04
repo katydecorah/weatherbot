@@ -73,13 +73,38 @@ export function checkItsNiceOut(current: Currently) {
     : [];
 }
 
-function formatTime(unix: number) {
-  const dtFormat = new Intl.DateTimeFormat("en-US", {
-    timeStyle: "short",
-    dateStyle: "short",
+function formatTime(unix: number, next = "") {
+  const messageFormat = new Intl.DateTimeFormat("en-US", {
+    hour: "numeric",
+    minute: "numeric",
+    weekday: "long",
     timeZone: "America/New_York",
   });
-  return dtFormat.format(new Date(unix * 1e3));
+
+  const dayFormat = new Intl.DateTimeFormat("en-US", {
+    weekday: "long",
+    timeZone: "America/New_York",
+  });
+  const day = dayFormat.format(new Date(unix * 1e3));
+  const timeFormat = new Intl.DateTimeFormat("en-US", {
+    hour: "numeric",
+    minute: "numeric",
+    timeZone: "America/New_York",
+  });
+  return {
+    message:
+      next === day
+        ? timeFormat.format(new Date(unix * 1e3))
+        : messageFormat.format(new Date(unix * 1e3)),
+    day,
+  };
+}
+
+function eventRange(start: number, end: number) {
+  return {
+    start: formatTime(start).message,
+    end: formatTime(end, formatTime(start).day).message,
+  };
 }
 
 export function getAlerts(alerts: Alerts[]) {
@@ -89,22 +114,20 @@ export function getAlerts(alerts: Alerts[]) {
   return [
     {
       type: "section",
-      fields: filtered.reduce(
-        (arr, alert) => [
+      fields: filtered.reduce((arr, alert) => {
+        const { start, end } = eventRange(alert.time, alert.expires);
+        return [
           ...arr,
           {
             type: "mrkdwn",
-            text: `*<${alert.uri}|${alert.title}>*\n${formatTime(
-              alert.time
-            )} until ${formatTime(alert.expires)}`,
+            text: `*<${alert.uri}|${alert.title}>*\n${start} until ${end}`,
           },
           {
             type: "mrkdwn",
             text: getIcon(alert.severity),
           },
-        ],
-        []
-      ),
+        ];
+      }, []),
     },
   ];
 }
