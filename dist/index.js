@@ -13025,39 +13025,6 @@ function getWeather() {
     });
 }
 
-;// CONCATENATED MODULE: ./src/precipitation.ts
-
-function getPrecipitation(hourly) {
-    const data = hourly.data.slice(0, 13);
-    const precipitation = data.reduce((total, { precipType, precipAccumulation }) => precipType == "snow" && precipAccumulation
-        ? total + precipAccumulation
-        : total, 0);
-    if (precipitation < 1)
-        return [];
-    return [
-        {
-            type: "section",
-            text: {
-                type: "mrkdwn",
-                text: `:snowflake: *${hourly.summary}*
-The estimated snow accumulation is ${precipitation.toFixed(1)}":
-
-${data.map(listHourly).join("\n")}`,
-            },
-        },
-    ];
-}
-function unixToHour(unix) {
-    const hourFormat = new Intl.DateTimeFormat("en-US", {
-        hour: "numeric",
-        timeZone: (0,core.getInput)("Timezone"),
-    });
-    return hourFormat.format(new Date(unix * 1e3));
-}
-function listHourly({ time, precipAccumulation, temperature }) {
-    return `${unixToHour(time)}\t${precipAccumulation.toFixed(1)}" ${temperature.toFixed(0)}℉`;
-}
-
 ;// CONCATENATED MODULE: ./src/icons.ts
 function getIcon(icon_emoji) {
     const icons = {
@@ -13076,6 +13043,41 @@ function getIcon(icon_emoji) {
         advisory: ":warning:",
     };
     return icons[icon_emoji];
+}
+
+;// CONCATENATED MODULE: ./src/precipitation.ts
+
+
+function getPrecipitation(hourly) {
+    const data = hourly.data.slice(0, 13);
+    const precipitation = data.reduce((total, { precipType, precipAccumulation }) => precipType == "snow" && precipAccumulation
+        ? total + precipAccumulation
+        : total, 0);
+    if (precipitation < 1)
+        return [];
+    return [
+        {
+            type: "section",
+            text: {
+                type: "mrkdwn",
+                text: `*${hourly.summary}*
+The estimated snow accumulation is ${precipitation.toFixed(1)}":
+
+${data.map(listHourly).join("\n")}`,
+            },
+        },
+    ];
+}
+function unixToHour(unix) {
+    const hourFormat = new Intl.DateTimeFormat("en-US", {
+        hour: "numeric",
+        timeZone: (0,core.getInput)("Timezone"),
+    });
+    return hourFormat.format(new Date(unix * 1e3));
+}
+function listHourly({ time, precipAccumulation, temperature, icon, }) {
+    const spacer = unixToHour(time).length === 4 ? " " : "";
+    return `${getIcon(icon)} ${spacer}${unixToHour(time)}\t${precipAccumulation.toFixed(1)}" ${temperature.toFixed(0)}℉`;
 }
 
 ;// CONCATENATED MODULE: ./src/nice-out.ts
