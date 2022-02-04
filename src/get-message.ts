@@ -33,18 +33,14 @@ export function getPrecipitation(hourly: Interval) {
       fields: [
         {
           type: "mrkdwn",
-          text: `*${
-            hourly.summary
-          }*\nThe estimated snow accumulation is ${precipitation.toFixed(
-            1
-          )}":\n\n${data
-            .map(
-              (hour) =>
-                `${unixToHour(hour.time)}\t${hour.precipAccumulation.toFixed(
-                  1
-                )}"`
-            )
-            .join("\n")}`,
+          text: `*${hourly.summary}*
+The estimated snow accumulation is ${precipitation.toFixed(1)}":
+
+${data
+  .map(
+    (hour) => `${unixToHour(hour.time)}\t${hour.precipAccumulation.toFixed(1)}"`
+  )
+  .join("\n")}`,
         },
         {
           type: "mrkdwn",
