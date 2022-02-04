@@ -33,6 +33,7 @@ To use this action, create a new workflow in `.github/workflows` and modify it a
 name: Weatherbot
 
 on:
+  push:
   schedule:
     - cron: "00 0,12,18 * * *"
 
@@ -46,8 +47,8 @@ jobs:
       - name: Weather
         uses: katydecorah/weatherbot@v1.0.0
         with:
-          Latitude: 43.0616993
-          Longitude: -73.8069372
+          Latitude: ${{ secrets.Latitude }}
+          Longitude: ${{ secrets.Longitude }}
           DarkSkySecretKey: ${{ secrets.DarkSkySecretKey }}
           SlackWebHookUrl: ${{ secrets.SlackWebHookUrl }}
 ```
