@@ -2,12 +2,11 @@ import fetch from "node-fetch";
 import { getInput } from "@actions/core";
 
 export default async function getWeather() {
-  const lat = getInput("Latitude");
-  const long = getInput("Longitude");
-  const key = getInput("DarkSkySecretKey");
   try {
     const response = await fetch(
-      `https://api.darksky.net/forecast/${key}/${lat},${long}`,
+      `https://api.darksky.net/forecast/${getInput(
+        "DarkSkySecretKey"
+      )}/${getInput("Latitude")},${getInput("Longitude")}`,
       {
         method: "GET",
         headers: {

@@ -13010,11 +13010,8 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
 
 function getWeather() {
     return __awaiter(this, void 0, void 0, function* () {
-        const lat = (0,core.getInput)("Latitude");
-        const long = (0,core.getInput)("Longitude");
-        const key = (0,core.getInput)("DarkSkySecretKey");
         try {
-            const response = yield fetch(`https://api.darksky.net/forecast/${key}/${lat},${long}`, {
+            const response = yield fetch(`https://api.darksky.net/forecast/${(0,core.getInput)("DarkSkySecretKey")}/${(0,core.getInput)("Latitude")},${(0,core.getInput)("Longitude")}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -13040,7 +13037,7 @@ function getMessage({ hourly, currently, alerts }) {
 function unixToHour(unix) {
     const hourFormat = new Intl.DateTimeFormat("en-US", {
         hour: "numeric",
-        timeZone: (0,core.getInput)('Timezone'),
+        timeZone: (0,core.getInput)("Timezone"),
     });
     return hourFormat.format(new Date(unix * 1e3));
 }
@@ -13115,17 +13112,17 @@ function formatTime(unix, next = "") {
         hour: "numeric",
         minute: "numeric",
         weekday: "long",
-        timeZone: (0,core.getInput)('Timezone'),
+        timeZone: (0,core.getInput)("Timezone"),
     });
     const dayFormat = new Intl.DateTimeFormat("en-US", {
         weekday: "long",
-        timeZone: (0,core.getInput)('Timezone'),
+        timeZone: (0,core.getInput)("Timezone"),
     });
     const day = dayFormat.format(new Date(unix * 1e3));
     const timeFormat = new Intl.DateTimeFormat("en-US", {
         hour: "numeric",
         minute: "numeric",
-        timeZone: (0,core.getInput)('Timezone'),
+        timeZone: (0,core.getInput)("Timezone"),
     });
     return {
         message: next === day
@@ -13201,7 +13198,7 @@ var post_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arg
 
 function post(blocks) {
     return post_awaiter(this, void 0, void 0, function* () {
-        if (blocks.length === 0)
+        if (blocks && blocks.length === 0)
             (0,core.info)("No snow expected, it's not that nice out, and there are no weather alerts.");
         try {
             const SlackWebHookUrl = (0,core.getInput)("SlackWebHookUrl");
