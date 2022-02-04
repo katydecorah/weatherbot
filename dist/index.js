@@ -13076,7 +13076,7 @@ function unixToHour(unix) {
     return hourFormat.format(new Date(unix * 1e3));
 }
 function listHourly({ time, precipAccumulation, temperature, icon, }) {
-    const spacer = unixToHour(time).length === 4 ? " " : "";
+    const spacer = unixToHour(time).length === 4 ? "  " : "";
     return `${getIcon(icon)} ${spacer}${unixToHour(time)}\t${precipAccumulation.toFixed(1)}" ${temperature.toFixed(0)}℉`;
 }
 
