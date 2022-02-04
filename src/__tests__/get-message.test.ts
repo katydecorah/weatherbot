@@ -64,15 +64,15 @@ describe("getMessage", () => {
       The estimated snow accumulation is 4.6\\":
 
       :snowflake: 12 PM	0.5\\" 26℉
-      :snowflake: &nbsp;1 PM	0.2\\" 27℉
-      :snowflake: &nbsp;2 PM	0.3\\" 28℉
-      :snowflake: &nbsp;3 PM	0.5\\" 29℉
-      :snowflake: &nbsp;4 PM	0.4\\" 30℉
-      :snowflake: &nbsp;5 PM	0.4\\" 30℉
-      :snowflake: &nbsp;6 PM	0.4\\" 30℉
-      :snowflake: &nbsp;7 PM	0.3\\" 29℉
-      :snowflake: &nbsp;8 PM	0.3\\" 28℉
-      :snowflake: &nbsp;9 PM	0.3\\" 27℉
+      :snowflake:   1 PM	0.2\\" 27℉
+      :snowflake:   2 PM	0.3\\" 28℉
+      :snowflake:   3 PM	0.5\\" 29℉
+      :snowflake:   4 PM	0.4\\" 30℉
+      :snowflake:   5 PM	0.4\\" 30℉
+      :snowflake:   6 PM	0.4\\" 30℉
+      :snowflake:   7 PM	0.3\\" 29℉
+      :snowflake:   8 PM	0.3\\" 28℉
+      :snowflake:   9 PM	0.3\\" 27℉
       :snowflake: 10 PM	0.3\\" 27℉
       :snowflake: 11 PM	0.3\\" 26℉
       :snowflake: 12 AM	0.3\\" 25℉",
