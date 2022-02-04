@@ -13162,10 +13162,27 @@ function eventRange(start, end) {
 
 
 function getMessage({ hourly, currently, alerts }) {
+    const listAlerts = getAlerts(alerts);
     const precipitation = getPrecipitation(hourly);
     const niceOut = checkItsNiceOut(currently);
-    const listAlerts = getAlerts(alerts);
-    return [...precipitation, ...niceOut, ...listAlerts];
+    return [
+        ...listAlerts,
+        ...addDivider(listAlerts, precipitation, niceOut),
+        ...precipitation,
+        ...addDivider(niceOut, precipitation, listAlerts),
+        ...niceOut,
+    ];
+}
+function addDivider(arr1, arr2, arr3) {
+    return [
+        ...(arr1.length && (arr2.length || arr3.length)
+            ? [
+                {
+                    type: "divider",
+                },
+            ]
+            : []),
+    ];
 }
 
 // EXTERNAL MODULE: ./node_modules/@slack/webhook/dist/index.js
