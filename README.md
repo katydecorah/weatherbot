@@ -42,7 +42,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Weather
-        uses: katydecorah/weatherbot@v1.0.0
+        uses: katydecorah/weatherbot@v2.0.0
         with:
           Latitude: ${{ secrets.Latitude }}
           Longitude: ${{ secrets.Longitude }}
