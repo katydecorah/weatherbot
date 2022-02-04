@@ -1,4 +1,4 @@
-import fetch from "node-fetch";
+import { IncomingWebhook } from "@slack/webhook";
 import { getInput } from "@actions/core";
 
 export default async function post({
@@ -8,24 +8,12 @@ export default async function post({
   icon_emoji: string;
   text: string;
 }) {
-  const json = {
-    username: "WeatherBot",
-    icon_emoji,
-    parse: "full",
-    text,
-    markdown: true,
-  };
-
-  const SlackWebHookUrl = getInput("SlackWebHookUrl");
-
   if (!text)
     return "No snow expected, it's not that nice out, and there are no weather alerts.";
   try {
-    await fetch(`${SlackWebHookUrl}`, {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(json),
-    });
+    const SlackWebHookUrl = getInput("SlackWebHookUrl");
+    const webhook = new IncomingWebhook(SlackWebHookUrl);
+    await webhook.send({ text, icon_emoji });
   } catch (error) {
     throw new Error(error);
   }
