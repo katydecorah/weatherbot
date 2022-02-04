@@ -1,6 +1,7 @@
 import { Interval, Datum } from "./get-weather";
 import { getInput } from "@actions/core";
 import { Message } from "./get-message";
+import getIcon from "./icons";
 
 export default function getPrecipitation(hourly: Interval): Message {
   const data = hourly.data.slice(0, 13);
@@ -17,7 +18,7 @@ export default function getPrecipitation(hourly: Interval): Message {
       type: "section",
       text: {
         type: "mrkdwn",
-        text: `:snowflake: *${hourly.summary}*
+        text: `*${hourly.summary}*
 The estimated snow accumulation is ${precipitation.toFixed(1)}":
 
 ${data.map(listHourly).join("\n")}`,
@@ -34,8 +35,14 @@ function unixToHour(unix: number) {
   return hourFormat.format(new Date(unix * 1e3));
 }
 
-export function listHourly({ time, precipAccumulation, temperature }: Datum) {
-  return `${unixToHour(time)}\t${precipAccumulation.toFixed(
-    1
-  )}" ${temperature.toFixed(0)}℉`;
+export function listHourly({
+  time,
+  precipAccumulation,
+  temperature,
+  icon,
+}: Datum) {
+  const spacer = unixToHour(time).length === 4 ? " " : "";
+  return `${getIcon(icon)} ${spacer}${unixToHour(
+    time
+  )}\t${precipAccumulation.toFixed(1)}" ${temperature.toFixed(0)}℉`;
 }
