@@ -13025,25 +13025,8 @@ function getWeather() {
     });
 }
 
-;// CONCATENATED MODULE: ./src/get-message.ts
+;// CONCATENATED MODULE: ./src/precipitation.ts
 
-function getMessage({ hourly, currently, alerts }) {
-    return [
-        ...(getPrecipitation(hourly) ? [...getPrecipitation(hourly)] : []),
-        ...(checkItsNiceOut(currently) ? [...checkItsNiceOut(currently)] : []),
-        ...(getAlerts(alerts) ? [...getAlerts(alerts)] : []),
-    ];
-}
-function unixToHour(unix) {
-    const hourFormat = new Intl.DateTimeFormat("en-US", {
-        hour: "numeric",
-        timeZone: (0,core.getInput)("Timezone"),
-    });
-    return hourFormat.format(new Date(unix * 1e3));
-}
-function listHourly({ time, precipAccumulation, temperature }) {
-    return `${unixToHour(time)}\t${precipAccumulation.toFixed(1)}" ${temperature.toFixed(0)}℉`;
-}
 function getPrecipitation(hourly) {
     const data = hourly.data.slice(0, 13);
     const precipitation = data.reduce((total, { precipType, precipAccumulation }) => precipType == "snow" && precipAccumulation
@@ -13064,24 +13047,41 @@ ${data.map(listHourly).join("\n")}`,
         },
     ];
 }
+function unixToHour(unix) {
+    const hourFormat = new Intl.DateTimeFormat("en-US", {
+        hour: "numeric",
+        timeZone: (0,core.getInput)("Timezone"),
+    });
+    return hourFormat.format(new Date(unix * 1e3));
+}
+function listHourly({ time, precipAccumulation, temperature }) {
+    return `${unixToHour(time)}\t${precipAccumulation.toFixed(1)}" ${temperature.toFixed(0)}℉`;
+}
+
+;// CONCATENATED MODULE: ./src/icons.ts
+function getIcon(icon_emoji) {
+    const icons = {
+        "clear-day": ":sunny:",
+        "clear-night": ":crescent_moon:",
+        "partly-cloudy-day": ":partly_sunny:",
+        "partly-cloudy-night": ":partly_sunny:",
+        cloudy: ":cloud:",
+        rain: ":rain_cloud:",
+        sleet: ":snow_cloud:",
+        snow: ":snowflake:",
+        wind: ":wind_blowing_face:",
+        fog: ":fog:",
+        warning: ":bangbang:",
+        watch: ":exclamation:",
+        advisory: ":warning:",
+    };
+    return icons[icon_emoji];
+}
+
+;// CONCATENATED MODULE: ./src/nice-out.ts
+
 function checkItsNiceOut(current) {
-    const coolerMonths = [0, 1, 2, 3, 11];
-    let itsNiceOut = false;
-    const today = new Date();
-    const month = today.getMonth();
-    // Check if it's currently nice out
-    if (current.temperature < 81 && current.precipProbability < 0.2) {
-        if (coolerMonths.includes(month)) {
-            // cooler months
-            if (current.temperature >= 50)
-                itsNiceOut = true;
-        }
-        else {
-            // warmer months
-            if (current.temperature >= 60)
-                itsNiceOut = true;
-        }
-    }
+    const itsNiceOut = calibrateNiceness(current);
     if (!itsNiceOut)
         return [];
     return [
@@ -13094,6 +13094,35 @@ Go outside!`,
             },
         },
     ];
+}
+function calibrateNiceness({ temperature, precipProbability }) {
+    if (temperature > 81 || precipProbability > 0.2)
+        return false;
+    if (temperature >= 50)
+        return true;
+    return false;
+}
+
+;// CONCATENATED MODULE: ./src/alerts.ts
+
+
+function getAlerts(alerts) {
+    if (!alerts)
+        return [];
+    const filtered = alerts.filter((f) => f.severity !== "advisory");
+    if (filtered.length === 0)
+        return [];
+    return filtered.map(formatAlert);
+}
+function formatAlert({ time, expires, severity, uri, title }) {
+    const { start, end } = eventRange(time, expires);
+    return {
+        type: "section",
+        text: {
+            type: "mrkdwn",
+            text: `${getIcon(severity)} *<${uri}|${title}>*\n${start} until ${end}`,
+        },
+    };
 }
 function formatTime(unix, next = "") {
     const messageFormat = new Intl.DateTimeFormat("en-US", {
@@ -13125,43 +13154,16 @@ function eventRange(start, end) {
         end: formatTime(end, formatTime(start).day).message,
     };
 }
-function getAlerts(alerts) {
-    if (!alerts)
-        return [];
-    const filtered = alerts.filter((f) => f.severity !== "advisory");
-    if (filtered.length === 0)
-        return [];
-    return filtered.reduce((arr, alert) => {
-        const { start, end } = eventRange(alert.time, alert.expires);
-        return [
-            ...arr,
-            {
-                type: "section",
-                text: {
-                    type: "mrkdwn",
-                    text: `${getIcon(alert.severity)} *<${alert.uri}|${alert.title}>*\n${start} until ${end}`,
-                },
-            },
-        ];
-    }, []);
-}
-function getIcon(icon_emoji) {
-    const icons = {
-        "clear-day": ":sunny:",
-        "clear-night": ":crescent_moon:",
-        "partly-cloudy-day": ":partly_sunny:",
-        "partly-cloudy-night": ":partly_sunny:",
-        cloudy: ":cloud:",
-        rain: ":rain_cloud:",
-        sleet: ":snow_cloud:",
-        snow: ":snowflake:",
-        wind: ":wind_blowing_face:",
-        fog: ":fog:",
-        warning: ":bangbang:",
-        watch: ":exclamation:",
-        advisory: ":warning:",
-    };
-    return icons[icon_emoji];
+
+;// CONCATENATED MODULE: ./src/get-message.ts
+
+
+
+function getMessage({ hourly, currently, alerts }) {
+    const precipitation = getPrecipitation(hourly);
+    const niceOut = checkItsNiceOut(currently);
+    const listAlerts = getAlerts(alerts);
+    return [...precipitation, ...niceOut, ...listAlerts];
 }
 
 // EXTERNAL MODULE: ./node_modules/@slack/webhook/dist/index.js
