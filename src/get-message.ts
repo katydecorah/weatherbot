@@ -98,9 +98,9 @@ export function getAlertDetails(alerts: Alerts[]) {
           ...arr,
           {
             type: "mrkdwn",
-            text: `*${alert.title}* from ${formatTime(
+            text: `*<${alert.uri}|${alert.title}>*\n${formatTime(
               alert.time
-            )} until ${formatTime(alert.expires)} ${alert.uri}`,
+            )} until ${formatTime(alert.expires)}`,
           },
           {
             type: "mrkdwn",

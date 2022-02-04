@@ -13031,9 +13031,9 @@ function getWeather() {
 ;// CONCATENATED MODULE: ./src/get-message.ts
 function getMessage({ hourly, currently, alerts }) {
     return [
-        ...getPrecipitation(hourly) ? [...getPrecipitation(hourly)] : [],
-        ...checkItsNiceOut(currently) ? [...checkItsNiceOut(currently)] : [],
-        ...getAlerts(alerts) ? [...getAlerts(alerts)] : []
+        ...(getPrecipitation(hourly) ? [...getPrecipitation(hourly)] : []),
+        ...(checkItsNiceOut(currently) ? [...checkItsNiceOut(currently)] : []),
+        ...(getAlerts(alerts) ? [...getAlerts(alerts)] : []),
     ];
 }
 function getPrecipitation(hourly) {
@@ -13046,21 +13046,23 @@ function getPrecipitation(hourly) {
             return precipitation;
         }
     }, 0);
-    return precipitation > 1 ? [
-        {
-            type: "section",
-            fields: [
-                {
-                    type: "mrkdwn",
-                    text: `We're expected to get *${Math.ceil(precipitation * 100) / 100} inches* of snow over the next 12 hours.`,
-                },
-                {
-                    type: "mrkdwn",
-                    text: ":snowflake:",
-                },
-            ],
-        },
-    ] : [];
+    return precipitation > 1
+        ? [
+            {
+                type: "section",
+                fields: [
+                    {
+                        type: "mrkdwn",
+                        text: `We're expected to get *${Math.ceil(precipitation * 100) / 100} inches* of snow over the next 12 hours.`,
+                    },
+                    {
+                        type: "mrkdwn",
+                        text: ":snowflake:",
+                    },
+                ],
+            },
+        ]
+        : [];
 }
 function checkItsNiceOut(current) {
     const coolerMonths = [0, 1, 2, 3, 11];
@@ -13122,7 +13124,7 @@ function getAlertDetails(alerts) {
                 ...arr,
                 {
                     type: "mrkdwn",
-                    text: `*${alert.title}* from ${formatTime(alert.time)} until ${formatTime(alert.expires)} ${alert.uri}`,
+                    text: `*<${alert.uri}|${alert.title}>*\n${formatTime(alert.time)} until ${formatTime(alert.expires)}`,
                 },
                 {
                     type: "mrkdwn",
