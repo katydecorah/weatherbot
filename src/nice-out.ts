@@ -3,20 +3,7 @@ import getIcon from "./icons";
 import { Message } from "./get-message";
 
 export default function checkItsNiceOut(current: Currently): Message {
-  const coolerMonths = [0, 1, 2, 3, 11];
-  let itsNiceOut = false;
-  const today = new Date();
-  const month = today.getMonth();
-  // Check if it's currently nice out
-  if (current.temperature < 81 && current.precipProbability < 0.2) {
-    if (coolerMonths.includes(month)) {
-      // cooler months
-      if (current.temperature >= 50) itsNiceOut = true;
-    } else {
-      // warmer months
-      if (current.temperature >= 60) itsNiceOut = true;
-    }
-  }
+  const itsNiceOut = calibrateNiceness(current);
   if (!itsNiceOut) return [];
   return [
     {
@@ -30,4 +17,10 @@ Go outside!`,
       },
     },
   ];
+}
+
+function calibrateNiceness({ temperature, precipProbability }: Currently) {
+  if (temperature > 81 || precipProbability > 0.2) return false;
+  if (temperature >= 50) return true;
+  return false;
 }
