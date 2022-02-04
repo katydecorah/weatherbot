@@ -20,7 +20,7 @@ export default async function getWeather() {
   }
 }
 
-type Datum = {
+export type Datum = {
   time: number;
   summary: string;
   icon: string;
