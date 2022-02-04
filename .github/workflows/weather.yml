@@ -2,7 +2,7 @@ name: Weatherbot
 
 on:
   schedule:
-    - cron: "00 0,12,18 * * *"
+    - cron: "0 0,12,18 * * *"
 
 jobs:
   weather_update:
