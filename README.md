@@ -31,8 +31,9 @@ To use this action, create a new workflow in `.github/workflows` and modify it a
 name: Weatherbot
 
 on:
+  push:
   schedule:
-    - cron: "00 0,12,18 * * *"
+    - cron: "0 0,12,18 * * *"
 
 jobs:
   weather_update:
