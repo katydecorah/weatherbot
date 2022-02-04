@@ -1,6 +1,6 @@
 {
   "name": "weatherbot",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A Slack bot that gives you a heads up about snow, nice weather, and severe weather alerts",
   "main": "dist/index.js",
   "author": "Katy DeCorah",
