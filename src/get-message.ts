@@ -25,9 +25,9 @@ export function getPrecipitation(hourly: Interval) {
           fields: [
             {
               type: "mrkdwn",
-              text: `We're expected to get *${
+              text: `*${
                 Math.ceil(precipitation * 100) / 100
-              } inches* of snow over the next 12 hours.`,
+              } inches of snow*\nover the next 12 hours`,
             },
             {
               type: "mrkdwn",

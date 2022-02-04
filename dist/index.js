@@ -13053,7 +13053,7 @@ function getPrecipitation(hourly) {
                 fields: [
                     {
                         type: "mrkdwn",
-                        text: `We're expected to get *${Math.ceil(precipitation * 100) / 100} inches* of snow over the next 12 hours.`,
+                        text: `*${Math.ceil(precipitation * 100) / 100} inches of snow*\nover the next 12 hours`,
                     },
                     {
                         type: "mrkdwn",
@@ -13100,7 +13100,7 @@ function checkItsNiceOut(current) {
         ]
         : [];
 }
-function formatTime(unix, next = '') {
+function formatTime(unix, next = "") {
     const messageFormat = new Intl.DateTimeFormat("en-US", {
         hour: "numeric",
         minute: "numeric",
@@ -13118,14 +13118,16 @@ function formatTime(unix, next = '') {
         timeZone: "America/New_York",
     });
     return {
-        message: next === day ? timeFormat.format(new Date(unix * 1e3)) : messageFormat.format(new Date(unix * 1e3)),
-        day
+        message: next === day
+            ? timeFormat.format(new Date(unix * 1e3))
+            : messageFormat.format(new Date(unix * 1e3)),
+        day,
     };
 }
 function eventRange(start, end) {
     return {
         start: formatTime(start).message,
-        end: formatTime(end, formatTime(start).day).message
+        end: formatTime(end, formatTime(start).day).message,
     };
 }
 function getAlerts(alerts) {

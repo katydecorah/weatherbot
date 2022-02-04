@@ -60,7 +60,8 @@ describe("getMessage", () => {
         Object {
           "fields": Array [
             Object {
-              "text": "We're expected to get *4.57 inches* of snow over the next 12 hours.",
+              "text": "*4.57 inches of snow*
+      over the next 12 hours",
               "type": "mrkdwn",
             },
             Object {
