@@ -49,22 +49,22 @@ describe("getMessage", () => {
       Array [
         Object {
           "text": Object {
-            "text": ":snowflake: *Snow (4–7 in.) until tomorrow morning.*
+            "text": "*Snow (4–7 in.) until tomorrow morning.*
       The estimated snow accumulation is 4.6\\":
 
-      12 PM	0.5\\" 26℉
-      1 PM	0.2\\" 27℉
-      2 PM	0.3\\" 28℉
-      3 PM	0.5\\" 29℉
-      4 PM	0.4\\" 30℉
-      5 PM	0.4\\" 30℉
-      6 PM	0.4\\" 30℉
-      7 PM	0.3\\" 29℉
-      8 PM	0.3\\" 28℉
-      9 PM	0.3\\" 27℉
-      10 PM	0.3\\" 27℉
-      11 PM	0.3\\" 26℉
-      12 AM	0.3\\" 25℉",
+      :snowflake: 12 PM	0.5\\" 26℉
+      :snowflake: 1 PM	0.2\\" 27℉
+      :snowflake: 2 PM	0.3\\" 28℉
+      :snowflake: 3 PM	0.5\\" 29℉
+      :snowflake: 4 PM	0.4\\" 30℉
+      :snowflake: 5 PM	0.4\\" 30℉
+      :snowflake: 6 PM	0.4\\" 30℉
+      :snowflake: 7 PM	0.3\\" 29℉
+      :snowflake: 8 PM	0.3\\" 28℉
+      :snowflake: 9 PM	0.3\\" 27℉
+      :snowflake: 10 PM	0.3\\" 27℉
+      :snowflake: 11 PM	0.3\\" 26℉
+      :snowflake: 12 AM	0.3\\" 25℉",
             "type": "mrkdwn",
           },
           "type": "section",
