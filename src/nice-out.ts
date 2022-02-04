@@ -1,7 +1,8 @@
 import { Currently } from "./get-weather";
 import getIcon from "./icons";
+import { Message } from "./get-message";
 
-export default function checkItsNiceOut(current: Currently) {
+export default function checkItsNiceOut(current: Currently): Message {
   const coolerMonths = [0, 1, 2, 3, 11];
   let itsNiceOut = false;
   const today = new Date();

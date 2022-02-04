@@ -13027,16 +13027,6 @@ function getWeather() {
 
 ;// CONCATENATED MODULE: ./src/precipitation.ts
 
-function unixToHour(unix) {
-    const hourFormat = new Intl.DateTimeFormat("en-US", {
-        hour: "numeric",
-        timeZone: (0,core.getInput)("Timezone"),
-    });
-    return hourFormat.format(new Date(unix * 1e3));
-}
-function listHourly({ time, precipAccumulation, temperature }) {
-    return `${unixToHour(time)}\t${precipAccumulation.toFixed(1)}" ${temperature.toFixed(0)}℉`;
-}
 function getPrecipitation(hourly) {
     const data = hourly.data.slice(0, 13);
     const precipitation = data.reduce((total, { precipType, precipAccumulation }) => precipType == "snow" && precipAccumulation
@@ -13056,6 +13046,16 @@ ${data.map(listHourly).join("\n")}`,
             },
         },
     ];
+}
+function unixToHour(unix) {
+    const hourFormat = new Intl.DateTimeFormat("en-US", {
+        hour: "numeric",
+        timeZone: (0,core.getInput)("Timezone"),
+    });
+    return hourFormat.format(new Date(unix * 1e3));
+}
+function listHourly({ time, precipAccumulation, temperature }) {
+    return `${unixToHour(time)}\t${precipAccumulation.toFixed(1)}" ${temperature.toFixed(0)}℉`;
 }
 
 ;// CONCATENATED MODULE: ./src/icons.ts
@@ -13121,19 +13121,17 @@ function getAlerts(alerts) {
     const filtered = alerts.filter((f) => f.severity !== "advisory");
     if (filtered.length === 0)
         return [];
-    return filtered.reduce((arr, alert) => {
-        const { start, end } = eventRange(alert.time, alert.expires);
-        return [
-            ...arr,
-            {
-                type: "section",
-                text: {
-                    type: "mrkdwn",
-                    text: `${getIcon(alert.severity)} *<${alert.uri}|${alert.title}>*\n${start} until ${end}`,
-                },
-            },
-        ];
-    }, []);
+    return filtered.map(formatAlert);
+}
+function formatAlert({ time, expires, severity, uri, title }) {
+    const { start, end } = eventRange(time, expires);
+    return {
+        type: "section",
+        text: {
+            type: "mrkdwn",
+            text: `${getIcon(severity)} *<${uri}|${title}>*\n${start} until ${end}`,
+        },
+    };
 }
 function formatTime(unix, next = "") {
     const messageFormat = new Intl.DateTimeFormat("en-US", {

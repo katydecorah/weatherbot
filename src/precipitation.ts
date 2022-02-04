@@ -1,21 +1,8 @@
 import { Interval, Datum } from "./get-weather";
 import { getInput } from "@actions/core";
+import { Message } from "./get-message";
 
-function unixToHour(unix: number) {
-  const hourFormat = new Intl.DateTimeFormat("en-US", {
-    hour: "numeric",
-    timeZone: getInput("Timezone"),
-  });
-  return hourFormat.format(new Date(unix * 1e3));
-}
-
-export function listHourly({ time, precipAccumulation, temperature }: Datum) {
-  return `${unixToHour(time)}\t${precipAccumulation.toFixed(
-    1
-  )}" ${temperature.toFixed(0)}℉`;
-}
-
-export default function getPrecipitation(hourly: Interval) {
+export default function getPrecipitation(hourly: Interval): Message {
   const data = hourly.data.slice(0, 13);
   const precipitation = data.reduce(
     (total, { precipType, precipAccumulation }) =>
@@ -37,4 +24,18 @@ ${data.map(listHourly).join("\n")}`,
       },
     },
   ];
+}
+
+function unixToHour(unix: number) {
+  const hourFormat = new Intl.DateTimeFormat("en-US", {
+    hour: "numeric",
+    timeZone: getInput("Timezone"),
+  });
+  return hourFormat.format(new Date(unix * 1e3));
+}
+
+export function listHourly({ time, precipAccumulation, temperature }: Datum) {
+  return `${unixToHour(time)}\t${precipAccumulation.toFixed(
+    1
+  )}" ${temperature.toFixed(0)}℉`;
 }
