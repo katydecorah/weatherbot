@@ -1,12 +1,12 @@
 # weatherbot
 
-A Slack bot that posts a message if:
+A GitHub action that posts weather announcements to Slack, if:
 
 - There will be snow (more than one inch of snow over the next twelve hours).
 - It's nice out (temperature is between 50/60℉ and 80℉ and low probability of precipitation).
-- There are any weather alerts.
+- There are any weather warnings or watches.
 
-This bot uses Slack API and Dark Sky API.
+This bot uses the Slack and Dark Sky APIs.
 
 | Skycon              | emoji |
 | ------------------- | ----- |
@@ -20,8 +20,6 @@ This bot uses Slack API and Dark Sky API.
 | snow                | ❄️    |
 | wind                | 🌬     |
 | fog                 | 🌫     |
-
-To enable emoji, add the `chat:write.customize` scope to your Slack app. [More](https://stackoverflow.com/a/53200237)
 
 <!-- START GENERATED DOCUMENTATION -->
 
