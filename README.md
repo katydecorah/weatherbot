@@ -30,7 +30,11 @@ To enable emoji, add the `chat:write.customize` scope to your Slack app. [More](
 To use this action, create a new workflow in `.github/workflows` and modify it as needed:
 
 ```yml
-on: push
+name: Weatherbot
+
+on:
+  schedule:
+    - cron: "00 0,12,18 * * *"
 
 jobs:
   weather_update:
