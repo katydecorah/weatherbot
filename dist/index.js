@@ -13043,10 +13043,21 @@ function getPrecipitation(hourly) {
         }
     }, 0);
     if (precipitation > 1) {
-        return {
-            text: `We're expected to get *${Math.ceil(precipitation * 100) / 100} inches* of snow over the next 12 hours. Park the cars good!`,
-            icon_emoji: ":snowflake:",
-        };
+        return [
+            {
+                "type": "section",
+                "fields": [
+                    {
+                        "type": "mrkdwn",
+                        "text": `We're expected to get *${Math.ceil(precipitation * 100) / 100} inches* of snow over the next 12 hours.`
+                    },
+                    {
+                        "type": "mrkdwn",
+                        "text": ":snowflake:"
+                    },
+                ]
+            },
+        ];
     }
 }
 function checkItsNiceOut(current) {
@@ -13068,11 +13079,21 @@ function checkItsNiceOut(current) {
         }
     }
     return itsNiceOut
-        ? {
-            text: `It's ${Math.round(current.temperature)}℉. Go outside!`,
-            icon_emoji: getIcon(current.icon),
-        }
-        : "";
+        ? [
+            {
+                "type": "section",
+                "fields": [
+                    {
+                        "type": "mrkdwn",
+                        "text": `It's ${Math.round(current.temperature)}℉. Go outside!`
+                    },
+                    {
+                        "type": "mrkdwn",
+                        "text": getIcon(current.icon)
+                    },
+                ]
+            },
+        ] : "";
 }
 function getAlerts(data) {
     if (!data.length)
@@ -13091,14 +13112,19 @@ function formatTime(unix) {
     return dtFormat.format(new Date(unix * 1e3));
 }
 function getAlertDetails(alerts) {
-    const alertSeverity = alerts.map((alert) => alert.severity);
-    const message = alerts.map((alert) => `*${alert.title}* from ${formatTime(alert.time)} until ${formatTime(alert.expires)} ${alert.uri}\n`);
-    return {
-        text: message.join(""),
-        icon_emoji: alertSeverity.includes("warning")
-            ? ":bangbang:"
-            : ":exclamation:",
-    };
+    return [
+        {
+            "type": "section",
+            "fields": alerts.reduce((arr, alert) => [...arr, {
+                    "type": "mrkdwn",
+                    "text": `*${alert.title}* from ${formatTime(alert.time)} until ${formatTime(alert.expires)} ${alert.uri}`
+                },
+                {
+                    "type": "mrkdwn",
+                    "text": getIcon(alert.severity)
+                }], [])
+        },
+    ];
 }
 function getIcon(icon_emoji) {
     const icons = {
@@ -13112,6 +13138,9 @@ function getIcon(icon_emoji) {
         snow: ":snowflake:",
         wind: ":wind_blowing_face:",
         fog: ":fog:",
+        warning: ':bangbang:',
+        watch: ':exclamation:',
+        advisory: ':warning:'
     };
     return icons[icon_emoji];
 }
@@ -13130,14 +13159,14 @@ var post_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arg
 };
 
 
-function post({ icon_emoji, text, }) {
+function post(blocks) {
     return post_awaiter(this, void 0, void 0, function* () {
-        if (!text)
+        if (!blocks)
             return "No snow expected, it's not that nice out, and there are no weather alerts.";
         try {
             const SlackWebHookUrl = (0,core.getInput)("SlackWebHookUrl");
             const webhook = new webhook_dist/* IncomingWebhook */.QU(SlackWebHookUrl);
-            yield webhook.send({ text, icon_emoji });
+            yield webhook.send({ blocks });
         }
         catch (error) {
             throw new Error(error);
@@ -13165,7 +13194,6 @@ function weather() {
         try {
             const currentWeather = yield getWeather();
             const message = getMessage(currentWeather);
-            (0,core.info)(`message: ${JSON.stringify(message, null, 2)}`);
             if (message)
                 yield post(message);
         }

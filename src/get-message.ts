@@ -16,12 +16,23 @@ export function getPrecipitation(hourly: Interval) {
     }
   }, 0);
   if (precipitation > 1) {
-    return {
-      text: `We're expected to get *${
-        Math.ceil(precipitation * 100) / 100
-      } inches* of snow over the next 12 hours. Park the cars good!`,
-      icon_emoji: ":snowflake:",
-    };
+    return [
+      {
+        type: "section",
+        fields: [
+          {
+            type: "mrkdwn",
+            text: `We're expected to get *${
+              Math.ceil(precipitation * 100) / 100
+            } inches* of snow over the next 12 hours.`,
+          },
+          {
+            type: "mrkdwn",
+            text: ":snowflake:",
+          },
+        ],
+      },
+    ];
   }
 }
 
@@ -41,10 +52,21 @@ export function checkItsNiceOut(current: Currently) {
     }
   }
   return itsNiceOut
-    ? {
-        text: `It's ${Math.round(current.temperature)}℉. Go outside!`,
-        icon_emoji: getIcon(current.icon),
-      }
+    ? [
+        {
+          type: "section",
+          fields: [
+            {
+              type: "mrkdwn",
+              text: `It's ${Math.round(current.temperature)}℉. Go outside!`,
+            },
+            {
+              type: "mrkdwn",
+              text: getIcon(current.icon),
+            },
+          ],
+        },
+      ]
     : "";
 }
 
@@ -65,19 +87,27 @@ function formatTime(unix: number) {
 }
 
 export function getAlertDetails(alerts: Alerts[]) {
-  const alertSeverity = alerts.map((alert) => alert.severity);
-  const message = alerts.map(
-    (alert: { title: string; time: number; expires: number; uri: string }) =>
-      `*${alert.title}* from ${formatTime(alert.time)} until ${formatTime(
-        alert.expires
-      )} ${alert.uri}\n`
-  );
-  return {
-    text: message.join(""),
-    icon_emoji: alertSeverity.includes("warning")
-      ? ":bangbang:"
-      : ":exclamation:",
-  };
+  return [
+    {
+      type: "section",
+      fields: alerts.reduce(
+        (arr, alert) => [
+          ...arr,
+          {
+            type: "mrkdwn",
+            text: `*${alert.title}* from ${formatTime(
+              alert.time
+            )} until ${formatTime(alert.expires)} ${alert.uri}`,
+          },
+          {
+            type: "mrkdwn",
+            text: getIcon(alert.severity),
+          },
+        ],
+        []
+      ),
+    },
+  ];
 }
 
 export function getIcon(icon_emoji: string) {
@@ -92,6 +122,9 @@ export function getIcon(icon_emoji: string) {
     snow: ":snowflake:",
     wind: ":wind_blowing_face:",
     fog: ":fog:",
+    warning: ":bangbang:",
+    watch: ":exclamation:",
+    advisory: ":warning:",
   };
   return icons[icon_emoji];
 }
