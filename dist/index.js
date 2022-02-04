@@ -13025,15 +13025,8 @@ function getWeather() {
     });
 }
 
-;// CONCATENATED MODULE: ./src/get-message.ts
+;// CONCATENATED MODULE: ./src/precipitation.ts
 
-function getMessage({ hourly, currently, alerts }) {
-    return [
-        ...(getPrecipitation(hourly) ? [...getPrecipitation(hourly)] : []),
-        ...(checkItsNiceOut(currently) ? [...checkItsNiceOut(currently)] : []),
-        ...(getAlerts(alerts) ? [...getAlerts(alerts)] : []),
-    ];
-}
 function unixToHour(unix) {
     const hourFormat = new Intl.DateTimeFormat("en-US", {
         hour: "numeric",
@@ -13064,6 +13057,29 @@ ${data.map(listHourly).join("\n")}`,
         },
     ];
 }
+
+;// CONCATENATED MODULE: ./src/icons.ts
+function getIcon(icon_emoji) {
+    const icons = {
+        "clear-day": ":sunny:",
+        "clear-night": ":crescent_moon:",
+        "partly-cloudy-day": ":partly_sunny:",
+        "partly-cloudy-night": ":partly_sunny:",
+        cloudy: ":cloud:",
+        rain: ":rain_cloud:",
+        sleet: ":snow_cloud:",
+        snow: ":snowflake:",
+        wind: ":wind_blowing_face:",
+        fog: ":fog:",
+        warning: ":bangbang:",
+        watch: ":exclamation:",
+        advisory: ":warning:",
+    };
+    return icons[icon_emoji];
+}
+
+;// CONCATENATED MODULE: ./src/nice-out.ts
+
 function checkItsNiceOut(current) {
     const coolerMonths = [0, 1, 2, 3, 11];
     let itsNiceOut = false;
@@ -13095,6 +13111,30 @@ Go outside!`,
         },
     ];
 }
+
+;// CONCATENATED MODULE: ./src/alerts.ts
+
+
+function getAlerts(alerts) {
+    if (!alerts)
+        return [];
+    const filtered = alerts.filter((f) => f.severity !== "advisory");
+    if (filtered.length === 0)
+        return [];
+    return filtered.reduce((arr, alert) => {
+        const { start, end } = eventRange(alert.time, alert.expires);
+        return [
+            ...arr,
+            {
+                type: "section",
+                text: {
+                    type: "mrkdwn",
+                    text: `${getIcon(alert.severity)} *<${alert.uri}|${alert.title}>*\n${start} until ${end}`,
+                },
+            },
+        ];
+    }, []);
+}
 function formatTime(unix, next = "") {
     const messageFormat = new Intl.DateTimeFormat("en-US", {
         hour: "numeric",
@@ -13125,43 +13165,16 @@ function eventRange(start, end) {
         end: formatTime(end, formatTime(start).day).message,
     };
 }
-function getAlerts(alerts) {
-    if (!alerts)
-        return [];
-    const filtered = alerts.filter((f) => f.severity !== "advisory");
-    if (filtered.length === 0)
-        return [];
-    return filtered.reduce((arr, alert) => {
-        const { start, end } = eventRange(alert.time, alert.expires);
-        return [
-            ...arr,
-            {
-                type: "section",
-                text: {
-                    type: "mrkdwn",
-                    text: `${getIcon(alert.severity)} *<${alert.uri}|${alert.title}>*\n${start} until ${end}`,
-                },
-            },
-        ];
-    }, []);
-}
-function getIcon(icon_emoji) {
-    const icons = {
-        "clear-day": ":sunny:",
-        "clear-night": ":crescent_moon:",
-        "partly-cloudy-day": ":partly_sunny:",
-        "partly-cloudy-night": ":partly_sunny:",
-        cloudy: ":cloud:",
-        rain: ":rain_cloud:",
-        sleet: ":snow_cloud:",
-        snow: ":snowflake:",
-        wind: ":wind_blowing_face:",
-        fog: ":fog:",
-        warning: ":bangbang:",
-        watch: ":exclamation:",
-        advisory: ":warning:",
-    };
-    return icons[icon_emoji];
+
+;// CONCATENATED MODULE: ./src/get-message.ts
+
+
+
+function getMessage({ hourly, currently, alerts }) {
+    const precipitation = getPrecipitation(hourly);
+    const niceOut = checkItsNiceOut(currently);
+    const listAlerts = getAlerts(alerts);
+    return [...precipitation, ...niceOut, ...listAlerts];
 }
 
 // EXTERNAL MODULE: ./node_modules/@slack/webhook/dist/index.js
