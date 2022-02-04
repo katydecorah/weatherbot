@@ -8,6 +8,14 @@ export default function getMessage({ hourly, currently, alerts }: Weather) {
   ];
 }
 
+function unixToHour(unix: number) {
+  const hourFormat = new Intl.DateTimeFormat("en-US", {
+    hour: "numeric",
+    timeZone: "America/New_York",
+  });
+  return hourFormat.format(new Date(unix * 1e3));
+}
+
 export function getPrecipitation(hourly: Interval) {
   const data = hourly.data.slice(0, 13);
   const precipitation = data.reduce((precipitation, hour) => {
@@ -24,9 +32,14 @@ export function getPrecipitation(hourly: Interval) {
       fields: [
         {
           type: "mrkdwn",
-          text: `*${
-            Math.ceil(precipitation * 100) / 100
-          } inches of snow*\nover the next 12 hours`,
+          text: `*${hourly.summary}*\n\n${data
+            .map(
+              (hour) =>
+                `${unixToHour(hour.time)}\t${hour.precipAccumulation.toFixed(
+                  1
+                )}'`
+            )
+            .join("\n")}`,
         },
         {
           type: "mrkdwn",
