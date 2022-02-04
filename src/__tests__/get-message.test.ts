@@ -1,11 +1,13 @@
 import getMessage from "../get-message";
-
 import alert from "./fixtures/alert.json";
 import success from "./fixtures/success.json";
 import snow from "./fixtures/snow.json";
 import nothing from "./fixtures/nothing.json";
+import * as core from "@actions/core";
 
 describe("getMessage", () => {
+  jest.spyOn(core, "getInput").mockImplementation(() => "America/New_York");
+
   test("alert", () => {
     expect(getMessage(alert)).toMatchInlineSnapshot(`
       Array [

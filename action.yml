@@ -17,3 +17,6 @@ inputs:
   SlackWebHookUrl:
     description: Your Slack webhook URL. Use a respository secret https://docs.github.com/en/actions/security-guides/encrypted-secrets
     required: true
+  Timezone:
+    description: Your timezone.
+    default: America/New_York

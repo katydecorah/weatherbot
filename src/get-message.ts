@@ -1,4 +1,5 @@
 import { Alerts, Currently, Interval, Weather } from "./get-weather";
+import { getInput } from "@actions/core";
 
 export default function getMessage({ hourly, currently, alerts }: Weather) {
   return [
@@ -11,7 +12,7 @@ export default function getMessage({ hourly, currently, alerts }: Weather) {
 function unixToHour(unix: number) {
   const hourFormat = new Intl.DateTimeFormat("en-US", {
     hour: "numeric",
-    timeZone: "America/New_York",
+    timeZone: getInput("Timezone"),
   });
   return hourFormat.format(new Date(unix * 1e3));
 }
@@ -88,18 +89,18 @@ function formatTime(unix: number, next = "") {
     hour: "numeric",
     minute: "numeric",
     weekday: "long",
-    timeZone: "America/New_York",
+    timeZone: getInput("Timezone"),
   });
 
   const dayFormat = new Intl.DateTimeFormat("en-US", {
     weekday: "long",
-    timeZone: "America/New_York",
+    timeZone: getInput("Timezone"),
   });
   const day = dayFormat.format(new Date(unix * 1e3));
   const timeFormat = new Intl.DateTimeFormat("en-US", {
     hour: "numeric",
     minute: "numeric",
-    timeZone: "America/New_York",
+    timeZone: getInput("Timezone"),
   });
   return {
     message:

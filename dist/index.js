@@ -13029,6 +13029,7 @@ function getWeather() {
 }
 
 ;// CONCATENATED MODULE: ./src/get-message.ts
+
 function getMessage({ hourly, currently, alerts }) {
     return [
         ...(getPrecipitation(hourly) ? [...getPrecipitation(hourly)] : []),
@@ -13039,7 +13040,7 @@ function getMessage({ hourly, currently, alerts }) {
 function unixToHour(unix) {
     const hourFormat = new Intl.DateTimeFormat("en-US", {
         hour: "numeric",
-        timeZone: "America/New_York",
+        timeZone: (0,core.getInput)('Timezone'),
     });
     return hourFormat.format(new Date(unix * 1e3));
 }
@@ -13114,17 +13115,17 @@ function formatTime(unix, next = "") {
         hour: "numeric",
         minute: "numeric",
         weekday: "long",
-        timeZone: "America/New_York",
+        timeZone: (0,core.getInput)('Timezone'),
     });
     const dayFormat = new Intl.DateTimeFormat("en-US", {
         weekday: "long",
-        timeZone: "America/New_York",
+        timeZone: (0,core.getInput)('Timezone'),
     });
     const day = dayFormat.format(new Date(unix * 1e3));
     const timeFormat = new Intl.DateTimeFormat("en-US", {
         hour: "numeric",
         minute: "numeric",
-        timeZone: "America/New_York",
+        timeZone: (0,core.getInput)('Timezone'),
     });
     return {
         message: next === day
