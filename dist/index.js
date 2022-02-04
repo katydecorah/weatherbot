@@ -13030,7 +13030,11 @@ function getWeather() {
 
 ;// CONCATENATED MODULE: ./src/get-message.ts
 function getMessage({ hourly, currently, alerts }) {
-    return (getPrecipitation(hourly) || checkItsNiceOut(currently) || getAlerts(alerts));
+    return [
+        ...getPrecipitation(hourly) ? [...getPrecipitation(hourly)] : [],
+        ...checkItsNiceOut(currently) ? [...checkItsNiceOut(currently)] : [],
+        ...getAlerts(alerts) ? [...getAlerts(alerts)] : []
+    ];
 }
 function getPrecipitation(hourly) {
     const data = hourly.data.slice(0, 13);
@@ -13042,23 +13046,21 @@ function getPrecipitation(hourly) {
             return precipitation;
         }
     }, 0);
-    if (precipitation > 1) {
-        return [
-            {
-                type: "section",
-                fields: [
-                    {
-                        type: "mrkdwn",
-                        text: `We're expected to get *${Math.ceil(precipitation * 100) / 100} inches* of snow over the next 12 hours.`,
-                    },
-                    {
-                        type: "mrkdwn",
-                        text: ":snowflake:",
-                    },
-                ],
-            },
-        ];
-    }
+    return precipitation > 1 ? [
+        {
+            type: "section",
+            fields: [
+                {
+                    type: "mrkdwn",
+                    text: `We're expected to get *${Math.ceil(precipitation * 100) / 100} inches* of snow over the next 12 hours.`,
+                },
+                {
+                    type: "mrkdwn",
+                    text: ":snowflake:",
+                },
+            ],
+        },
+    ] : [];
 }
 function checkItsNiceOut(current) {
     const coolerMonths = [0, 1, 2, 3, 11];
@@ -13094,14 +13096,14 @@ function checkItsNiceOut(current) {
                 ],
             },
         ]
-        : "";
+        : [];
 }
 function getAlerts(data) {
-    if (!data.length)
-        return;
+    if (!data)
+        return [];
     const alerts = data.filter((f) => f.severity !== "advisory");
     if (!alerts.length)
-        return;
+        return [];
     return getAlertDetails(alerts);
 }
 function formatTime(unix) {
@@ -13165,7 +13167,7 @@ var post_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arg
 
 function post(blocks) {
     return post_awaiter(this, void 0, void 0, function* () {
-        if (!blocks)
+        if (blocks.length === 0)
             (0,core.info)("No snow expected, it's not that nice out, and there are no weather alerts.");
         try {
             const SlackWebHookUrl = (0,core.getInput)("SlackWebHookUrl");
@@ -13198,8 +13200,7 @@ function weather() {
         try {
             const currentWeather = yield getWeather();
             const message = getMessage(currentWeather);
-            if (message)
-                yield post(message);
+            yield post(message);
         }
         catch (error) {
             (0,core.setFailed)(error.message);

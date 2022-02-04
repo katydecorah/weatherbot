@@ -9,7 +9,7 @@ async function weather() {
   try {
     const currentWeather = await getWeather();
     const message = getMessage(currentWeather);
-    if (message) await post(message);
+    await post(message);
   } catch (error) {
     setFailed(error.message);
   }

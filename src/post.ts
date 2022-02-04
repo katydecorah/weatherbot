@@ -2,7 +2,7 @@ import { IncomingWebhook } from "@slack/webhook";
 import { getInput, info } from "@actions/core";
 
 export default async function post(blocks) {
-  if (!blocks)
+  if (blocks.length === 0)
     info(
       "No snow expected, it's not that nice out, and there are no weather alerts."
     );

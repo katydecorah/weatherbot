@@ -68,10 +68,23 @@ describe("getMessage", () => {
           ],
           "type": "section",
         },
+        Object {
+          "fields": Array [
+            Object {
+              "text": "*Winter Storm Warning* from 4/29/17, 6:45 AM until 4/30/17, 8:00 AM https://alerts.weather.gov/cap/wwacapget.php?x=CO12584B430174.WinterStormWarning.12584B528040CO.PUBWSWPUB.4699429342326a6b57f552fae35b1fa6",
+              "type": "mrkdwn",
+            },
+            Object {
+              "text": ":bangbang:",
+              "type": "mrkdwn",
+            },
+          ],
+          "type": "section",
+        },
       ]
     `);
   });
   test("nothing", () => {
-    expect(getMessage(nothing)).toBeUndefined();
+    expect(getMessage(nothing)).toMatchInlineSnapshot(`Array []`);
   });
 });

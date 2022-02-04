@@ -1,9 +1,11 @@
 import { Alerts, Currently, Interval, Weather } from "./get-weather";
 
 export default function getMessage({ hourly, currently, alerts }: Weather) {
-  return (
-    getPrecipitation(hourly) || checkItsNiceOut(currently) || getAlerts(alerts)
-  );
+  return [
+    ...(getPrecipitation(hourly) ? [...getPrecipitation(hourly)] : []),
+    ...(checkItsNiceOut(currently) ? [...checkItsNiceOut(currently)] : []),
+    ...(getAlerts(alerts) ? [...getAlerts(alerts)] : []),
+  ];
 }
 
 export function getPrecipitation(hourly: Interval) {
@@ -15,25 +17,26 @@ export function getPrecipitation(hourly: Interval) {
       return precipitation;
     }
   }, 0);
-  if (precipitation > 1) {
-    return [
-      {
-        type: "section",
-        fields: [
-          {
-            type: "mrkdwn",
-            text: `We're expected to get *${
-              Math.ceil(precipitation * 100) / 100
-            } inches* of snow over the next 12 hours.`,
-          },
-          {
-            type: "mrkdwn",
-            text: ":snowflake:",
-          },
-        ],
-      },
-    ];
-  }
+
+  return precipitation > 1
+    ? [
+        {
+          type: "section",
+          fields: [
+            {
+              type: "mrkdwn",
+              text: `We're expected to get *${
+                Math.ceil(precipitation * 100) / 100
+              } inches* of snow over the next 12 hours.`,
+            },
+            {
+              type: "mrkdwn",
+              text: ":snowflake:",
+            },
+          ],
+        },
+      ]
+    : [];
 }
 
 export function checkItsNiceOut(current: Currently) {
@@ -67,13 +70,13 @@ export function checkItsNiceOut(current: Currently) {
           ],
         },
       ]
-    : "";
+    : [];
 }
 
 export function getAlerts(data: Alerts[]) {
-  if (!data.length) return;
+  if (!data) return [];
   const alerts = data.filter((f) => f.severity !== "advisory");
-  if (!alerts.length) return;
+  if (!alerts.length) return [];
   return getAlertDetails(alerts);
 }
 
