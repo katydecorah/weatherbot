@@ -63,20 +63,21 @@ describe("getMessage", () => {
           "fields": Array [
             Object {
               "text": "*Snow (4–7 in.) until tomorrow morning.*
+      The estimated snow accumulation is 4.6\\":
 
-      12 PM	0.5'
-      1 PM	0.2'
-      2 PM	0.3'
-      3 PM	0.5'
-      4 PM	0.4'
-      5 PM	0.4'
-      6 PM	0.4'
-      7 PM	0.3'
-      8 PM	0.3'
-      9 PM	0.3'
-      10 PM	0.3'
-      11 PM	0.3'
-      12 AM	0.3'",
+      12 PM	0.5\\"
+      1 PM	0.2\\"
+      2 PM	0.3\\"
+      3 PM	0.5\\"
+      4 PM	0.4\\"
+      5 PM	0.4\\"
+      6 PM	0.4\\"
+      7 PM	0.3\\"
+      8 PM	0.3\\"
+      9 PM	0.3\\"
+      10 PM	0.3\\"
+      11 PM	0.3\\"
+      12 AM	0.3\\"",
               "type": "mrkdwn",
             },
             Object {

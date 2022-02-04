@@ -13059,8 +13059,8 @@ function getPrecipitation(hourly) {
             fields: [
                 {
                     type: "mrkdwn",
-                    text: `*${hourly.summary}*\n\n${data
-                        .map((hour) => `${unixToHour(hour.time)}\t${hour.precipAccumulation.toFixed(1)}'`)
+                    text: `*${hourly.summary}*\nThe estimated snow accumulation is ${precipitation.toFixed(1)}":\n\n${data
+                        .map((hour) => `${unixToHour(hour.time)}\t${hour.precipAccumulation.toFixed(1)}"`)
                         .join("\n")}`,
                 },
                 {
