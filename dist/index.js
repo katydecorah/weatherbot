@@ -13041,16 +13041,14 @@ function unixToHour(unix) {
     });
     return hourFormat.format(new Date(unix * 1e3));
 }
+function listHourly({ time, precipAccumulation, temperature }) {
+    return `${unixToHour(time)}\t${precipAccumulation.toFixed(1)}" ${temperature.toFixed(0)}℉`;
+}
 function getPrecipitation(hourly) {
     const data = hourly.data.slice(0, 13);
-    const precipitation = data.reduce((precipitation, hour) => {
-        if (hour.precipType == "snow" && hour.precipAccumulation) {
-            return precipitation + hour.precipAccumulation;
-        }
-        else {
-            return precipitation;
-        }
-    }, 0);
+    const precipitation = data.reduce((total, { precipType, precipAccumulation }) => precipType == "snow" && precipAccumulation
+        ? total + precipAccumulation
+        : total, 0);
     if (precipitation < 1)
         return [];
     return [
@@ -13061,9 +13059,7 @@ function getPrecipitation(hourly) {
                 text: `:snowflake: *${hourly.summary}*
 The estimated snow accumulation is ${precipitation.toFixed(1)}":
 
-${data
-                    .map((hour) => `${unixToHour(hour.time)}\t${hour.precipAccumulation.toFixed(1)}" ${hour.temperature}℉`)
-                    .join("\n")}`,
+${data.map(listHourly).join("\n")}`,
             },
         },
     ];

@@ -1,4 +1,4 @@
-import { Alerts, Currently, Interval, Weather } from "./get-weather";
+import { Alerts, Currently, Interval, Weather, Datum } from "./get-weather";
 import { getInput } from "@actions/core";
 
 export default function getMessage({ hourly, currently, alerts }: Weather) {
@@ -17,15 +17,21 @@ function unixToHour(unix: number) {
   return hourFormat.format(new Date(unix * 1e3));
 }
 
+function listHourly({ time, precipAccumulation, temperature }: Datum) {
+  return `${unixToHour(time)}\t${precipAccumulation.toFixed(
+    1
+  )}" ${temperature.toFixed(0)}℉`;
+}
+
 export function getPrecipitation(hourly: Interval) {
   const data = hourly.data.slice(0, 13);
-  const precipitation = data.reduce((precipitation, hour) => {
-    if (hour.precipType == "snow" && hour.precipAccumulation) {
-      return precipitation + hour.precipAccumulation;
-    } else {
-      return precipitation;
-    }
-  }, 0);
+  const precipitation = data.reduce(
+    (total, { precipType, precipAccumulation }) =>
+      precipType == "snow" && precipAccumulation
+        ? total + precipAccumulation
+        : total,
+    0
+  );
   if (precipitation < 1) return [];
   return [
     {
@@ -35,14 +41,7 @@ export function getPrecipitation(hourly: Interval) {
         text: `:snowflake: *${hourly.summary}*
 The estimated snow accumulation is ${precipitation.toFixed(1)}":
 
-${data
-  .map(
-    (hour) =>
-      `${unixToHour(hour.time)}\t${hour.precipAccumulation.toFixed(
-        1
-      )}" ${hour.temperature.toFixed(0)}℉`
-  )
-  .join("\n")}`,
+${data.map(listHourly).join("\n")}`,
       },
     },
   ];
