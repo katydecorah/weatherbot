@@ -13100,14 +13100,6 @@ function checkItsNiceOut(current) {
         ]
         : [];
 }
-function getAlerts(data) {
-    if (!data)
-        return [];
-    const alerts = data.filter((f) => f.severity !== "advisory");
-    if (!alerts.length)
-        return [];
-    return getAlertDetails(alerts);
-}
 function formatTime(unix) {
     const dtFormat = new Intl.DateTimeFormat("en-US", {
         timeStyle: "short",
@@ -13116,11 +13108,16 @@ function formatTime(unix) {
     });
     return dtFormat.format(new Date(unix * 1e3));
 }
-function getAlertDetails(alerts) {
+function getAlerts(alerts) {
+    if (!alerts)
+        return [];
+    const filtered = alerts.filter(f => f.severity !== 'advisory');
+    if (filtered.length === 0)
+        return [];
     return [
         {
             type: "section",
-            fields: alerts.reduce((arr, alert) => [
+            fields: filtered.reduce((arr, alert) => [
                 ...arr,
                 {
                     type: "mrkdwn",

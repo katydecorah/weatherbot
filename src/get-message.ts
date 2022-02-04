@@ -73,13 +73,6 @@ export function checkItsNiceOut(current: Currently) {
     : [];
 }
 
-export function getAlerts(data: Alerts[]) {
-  if (!data) return [];
-  const alerts = data.filter((f) => f.severity !== "advisory");
-  if (!alerts.length) return [];
-  return getAlertDetails(alerts);
-}
-
 function formatTime(unix: number) {
   const dtFormat = new Intl.DateTimeFormat("en-US", {
     timeStyle: "short",
@@ -89,11 +82,14 @@ function formatTime(unix: number) {
   return dtFormat.format(new Date(unix * 1e3));
 }
 
-export function getAlertDetails(alerts: Alerts[]) {
+export function getAlerts(alerts: Alerts[]) {
+  if (!alerts) return [];
+  const filtered = alerts.filter((f) => f.severity !== "advisory");
+  if (filtered.length === 0) return [];
   return [
     {
       type: "section",
-      fields: alerts.reduce(
+      fields: filtered.reduce(
         (arr, alert) => [
           ...arr,
           {
