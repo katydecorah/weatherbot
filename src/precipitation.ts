@@ -41,7 +41,8 @@ export function listHourly({
   temperature,
   icon,
 }: Datum) {
-  return `${getIcon(icon)} ${unixToHour(time)}\t${precipAccumulation.toFixed(
-    1
-  )}" ${temperature.toFixed(0)}℉`;
+  const spacer = unixToHour(time).length === 4 ? " " : "";
+  return `${getIcon(icon)} ${spacer}${unixToHour(
+    time
+  )}\t${precipAccumulation.toFixed(1)}" ${temperature.toFixed(0)}℉`;
 }
