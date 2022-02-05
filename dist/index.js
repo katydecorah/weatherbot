@@ -13201,8 +13201,10 @@ var post_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arg
 
 function post(blocks) {
     return post_awaiter(this, void 0, void 0, function* () {
-        if (!blocks || blocks.length === 0)
+        if (!blocks || blocks.length === 0) {
             (0,core.info)("No snow expected, it's not that nice out, and there are no weather alerts.");
+            return;
+        }
         try {
             const SlackWebHookUrl = (0,core.getInput)("SlackWebHookUrl");
             const webhook = new webhook_dist/* IncomingWebhook */.QU(SlackWebHookUrl);

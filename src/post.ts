@@ -4,10 +4,12 @@ import { getInput, info } from "@actions/core";
 export default async function post(
   blocks: IncomingWebhookSendArguments["blocks"]
 ) {
-  if (!blocks || blocks.length === 0)
+  if (!blocks || blocks.length === 0) {
     info(
       "No snow expected, it's not that nice out, and there are no weather alerts."
     );
+    return;
+  }
   try {
     const SlackWebHookUrl = getInput("SlackWebHookUrl");
     const webhook = new IncomingWebhook(SlackWebHookUrl);
