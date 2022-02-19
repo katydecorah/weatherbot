@@ -13203,16 +13203,26 @@ var post_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arg
 };
 
 
+function formatText(text) {
+    const stripText = text.split("\n")[0].replace(/\*/g, "");
+    const removeLinks = stripText.match(/<.*\|(.*)>/);
+    return removeLinks
+        ? stripText.replace(removeLinks[0], removeLinks[1])
+        : stripText;
+}
 function post(blocks) {
     return post_awaiter(this, void 0, void 0, function* () {
         if (!blocks || blocks.length === 0) {
             (0,core.info)("No snow expected, it's not that nice out, and there are no weather alerts.");
             return;
         }
+        const text = blocks.filter(block => block.type === 'section')
+            .map((block) => ("text" in block ? formatText(block.text.text) : ''))
+            .join("\n");
         try {
             const SlackWebHookUrl = (0,core.getInput)("SlackWebHookUrl");
             const webhook = new webhook_dist/* IncomingWebhook */.QU(SlackWebHookUrl);
-            yield webhook.send({ blocks });
+            yield webhook.send({ text, blocks });
         }
         catch (error) {
             throw new Error(error);
