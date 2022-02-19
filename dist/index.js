@@ -13216,8 +13216,8 @@ function post(blocks) {
             (0,core.info)("No snow expected, it's not that nice out, and there are no weather alerts.");
             return;
         }
-        const text = blocks
-            .map((block) => ("text" in block ? formatText(block.text.text) : ""))
+        const text = blocks.filter(block => block.type === 'section')
+            .map((block) => ("text" in block ? formatText(block.text.text) : ''))
             .join("\n");
         try {
             const SlackWebHookUrl = (0,core.getInput)("SlackWebHookUrl");
