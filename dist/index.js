@@ -13209,10 +13209,11 @@ function post(blocks) {
             (0,core.info)("No snow expected, it's not that nice out, and there are no weather alerts.");
             return;
         }
+        const summary = blocks.map(block => 'text' in block ? block.text.text : '');
         try {
             const SlackWebHookUrl = (0,core.getInput)("SlackWebHookUrl");
             const webhook = new webhook_dist/* IncomingWebhook */.QU(SlackWebHookUrl);
-            yield webhook.send({ blocks });
+            yield webhook.send({ text: summary.join(' '), blocks });
         }
         catch (error) {
             throw new Error(error);
