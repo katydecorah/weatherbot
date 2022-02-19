@@ -13205,14 +13205,22 @@ var post_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arg
 
 function post(blocks) {
     return post_awaiter(this, void 0, void 0, function* () {
-        if (!blocks || blocks.length === 0) {
-            (0,core.info)("No snow expected, it's not that nice out, and there are no weather alerts.");
-            return;
-        }
+        /*if (!blocks || blocks.length === 0) {
+          info(
+            "No snow expected, it's not that nice out, and there are no weather alerts."
+          );
+          return;
+        }*/
         try {
             const SlackWebHookUrl = (0,core.getInput)("SlackWebHookUrl");
             const webhook = new webhook_dist/* IncomingWebhook */.QU(SlackWebHookUrl);
-            yield webhook.send({ blocks });
+            yield webhook.send({ text: "testing 1234", blocks: [{
+                        type: "section",
+                        text: {
+                            type: "mrkdwn",
+                            text: `This is a block`,
+                        },
+                    }] });
         }
         catch (error) {
             throw new Error(error);
