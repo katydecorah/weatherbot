@@ -52,8 +52,7 @@ describe("post", () => {
               "type": "section",
             },
           ],
-          "text": ":cloud: **It's 71℉**
-      Go outside!",
+          "text": ":cloud: It's 71℉",
         },
       ]
     `);
@@ -87,9 +86,8 @@ describe("post", () => {
               "type": "section",
             },
           ],
-          "text": ":bangbang: *<https://alerts.weather.gov/cap/wwacapget.php?x=MO12584B4351EC.FlashFloodWarning.12584B440D08MO.SGFFFSSGF.871ed93fdad70eafa96a72b70c339adb|Flash Flood Warning>*
-      Saturday 8:51 AM until 1:30 PM :exclamation: *<https://alerts.weather.gov/cap/wwacapget.php?x=MO12584B42AD14.FlashFloodWatch.12584F8C0B40MO.SGFFFASGF.baa9e79367797852476837c777d55f8e|Flash Flood Watch>*
-      Saturday 4:29 AM until Sunday 8:00 PM",
+          "text": ":bangbang: Flash Flood Warning
+      :exclamation: Flash Flood Watch",
         },
       ]
     `);
@@ -140,23 +138,9 @@ describe("post", () => {
               "type": "section",
             },
           ],
-          "text": ":bangbang: *<https://alerts.weather.gov/cap/wwacapget.php?x=CO12584B430174.WinterStormWarning.12584B528040CO.PUBWSWPUB.4699429342326a6b57f552fae35b1fa6|Winter Storm Warning>*
-      Saturday 6:45 AM until Sunday 8:00 AM  *Snow (4–7 in.) until tomorrow morning.*
-      The estimated snow accumulation is 4.6\\":
+          "text": ":bangbang: Winter Storm Warning
 
-      :snowflake: 12 PM	0.5\\" 26℉
-      :snowflake:   1 PM	0.2\\" 27℉
-      :snowflake:   2 PM	0.3\\" 28℉
-      :snowflake:   3 PM	0.5\\" 29℉
-      :snowflake:   4 PM	0.4\\" 30℉
-      :snowflake:   5 PM	0.4\\" 30℉
-      :snowflake:   6 PM	0.4\\" 30℉
-      :snowflake:   7 PM	0.3\\" 29℉
-      :snowflake:   8 PM	0.3\\" 28℉
-      :snowflake:   9 PM	0.3\\" 27℉
-      :snowflake: 10 PM	0.3\\" 27℉
-      :snowflake: 11 PM	0.3\\" 26℉
-      :snowflake: 12 AM	0.3\\" 25℉",
+      Snow (4–7 in.) until tomorrow morning.",
         },
       ]
     `);
