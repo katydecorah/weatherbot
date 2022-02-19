@@ -18,13 +18,13 @@ export default async function post(
     );
     return;
   }
-  const summary = blocks.map((block) =>
-    "text" in block ? formatText(block.text.text) : ""
-  );
+  const text = blocks
+    .map((block) => ("text" in block ? formatText(block.text.text) : ""))
+    .join("\n");
   try {
     const SlackWebHookUrl = getInput("SlackWebHookUrl");
     const webhook = new IncomingWebhook(SlackWebHookUrl);
-    await webhook.send({ text: summary.join("\n"), blocks });
+    await webhook.send({ text, blocks });
   } catch (error) {
     throw new Error(error);
   }
