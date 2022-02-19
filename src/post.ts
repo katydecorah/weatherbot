@@ -2,7 +2,7 @@ import { IncomingWebhook, IncomingWebhookSendArguments } from "@slack/webhook";
 import { getInput, info } from "@actions/core";
 
 export default async function post(
-  blocks: IncomingWebhookSendArguments["blocks"]
+  blocks?: IncomingWebhookSendArguments["blocks"]
 ) {
   if (!blocks || blocks.length === 0) {
     info(
