@@ -19,6 +19,7 @@ export default async function post(
     return;
   }
   const text = blocks
+    .filter((block) => block.type === "section")
     .map((block) => ("text" in block ? formatText(block.text.text) : ""))
     .join("\n");
   try {

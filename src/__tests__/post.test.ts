@@ -139,7 +139,6 @@ describe("post", () => {
             },
           ],
           "text": ":bangbang: Winter Storm Warning
-
       Snow (4–7 in.) until tomorrow morning.",
         },
       ]
