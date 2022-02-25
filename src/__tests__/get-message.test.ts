@@ -3,6 +3,7 @@ import alert from "./fixtures/alert.json";
 import success from "./fixtures/success.json";
 import snow from "./fixtures/snow.json";
 import nothing from "./fixtures/nothing.json";
+import errored from "./fixtures/error.json";
 import * as core from "@actions/core";
 
 describe("getMessage", () => {
@@ -37,6 +38,45 @@ describe("getMessage", () => {
           "text": Object {
             "text": ":cloud: **It's 71℉**
       Go outside!",
+            "type": "mrkdwn",
+          },
+          "type": "section",
+        },
+      ]
+    `);
+  });
+  test("precipAccumulation is optional", () => {
+    expect(getMessage(errored)).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "text": Object {
+            "text": ":bangbang: *<https://alerts.weather.gov/cap/wwacapget.php?x=NY1263E347E768.WinterStormWarning.1263E363C9B0NY.ALYWSWALY.f92fcbb051ad521ec09f3d653fca0d27|Winter Storm Warning>*
+      Friday 1:00 AM until 10:00 PM",
+            "type": "mrkdwn",
+          },
+          "type": "section",
+        },
+        Object {
+          "type": "divider",
+        },
+        Object {
+          "text": Object {
+            "text": "*Foggy starting tonight, continuing until tomorrow afternoon.*
+      The estimated snow accumulation is 6.0\\":
+
+      :crescent_moon:   7 PM	0\\" 24℉
+      :crescent_moon:   8 PM	0.0\\" 22℉
+      :partly_sunny:   9 PM	0.0\\" 21℉
+      :partly_sunny: 10 PM	0\\" 20℉
+      :partly_sunny: 11 PM	0\\" 19℉
+      :cloud: 12 AM	0.0\\" 19℉
+      :cloud:   1 AM	0.0\\" 20℉
+      :cloud:   2 AM	0.1\\" 20℉
+      :cloud:   3 AM	0.3\\" 19℉
+      :fog:   4 AM	0.8\\" 19℉
+      :fog:   5 AM	1.2\\" 18℉
+      :fog:   6 AM	1.5\\" 18℉
+      :fog:   7 AM	2.0\\" 17℉",
             "type": "mrkdwn",
           },
           "type": "section",

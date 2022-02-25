@@ -27,7 +27,7 @@ export type Datum = {
   sunriseTime: number;
   sunsetTime: number;
   moonPhase: number;
-  precipAccumulation: number;
+  precipAccumulation?: number;
   precipIntensity: number;
   precipIntensityMax: number;
   precipProbability: number;

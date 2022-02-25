@@ -42,7 +42,7 @@ export function listHourly({
   icon,
 }: Datum) {
   const spacer = unixToHour(time).length === 4 ? "  " : "";
-  return `${getIcon(icon)} ${spacer}${unixToHour(
-    time
-  )}\t${precipAccumulation.toFixed(1)}" ${temperature.toFixed(0)}℉`;
+  return `${getIcon(icon)} ${spacer}${unixToHour(time)}\t${
+    precipAccumulation ? precipAccumulation.toFixed(1) : 0
+  }" ${temperature.toFixed(0)}℉`;
 }

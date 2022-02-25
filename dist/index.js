@@ -13081,7 +13081,7 @@ function unixToHour(unix) {
 }
 function listHourly({ time, precipAccumulation, temperature, icon, }) {
     const spacer = unixToHour(time).length === 4 ? "  " : "";
-    return `${getIcon(icon)} ${spacer}${unixToHour(time)}\t${precipAccumulation.toFixed(1)}" ${temperature.toFixed(0)}℉`;
+    return `${getIcon(icon)} ${spacer}${unixToHour(time)}\t${precipAccumulation ? precipAccumulation.toFixed(1) : 0}" ${temperature.toFixed(0)}℉`;
 }
 
 ;// CONCATENATED MODULE: ./src/nice-out.ts
@@ -13216,8 +13216,9 @@ function post(blocks) {
             (0,core.info)("No snow expected, it's not that nice out, and there are no weather alerts.");
             return;
         }
-        const text = blocks.filter(block => block.type === 'section')
-            .map((block) => ("text" in block ? formatText(block.text.text) : ''))
+        const text = blocks
+            .filter((block) => block.type === "section")
+            .map((block) => ("text" in block ? formatText(block.text.text) : ""))
             .join("\n");
         try {
             const SlackWebHookUrl = (0,core.getInput)("SlackWebHookUrl");
