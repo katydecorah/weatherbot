@@ -22,7 +22,7 @@
   "dependencies": {
     "@actions/core": "^1.6.0",
     "@slack/webhook": "^6.1.0",
-    "node-fetch": "^3.2.0"
+    "node-fetch": "^3.2.1"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.16.11",
