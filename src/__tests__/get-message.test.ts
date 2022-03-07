@@ -36,8 +36,7 @@ describe("getMessage", () => {
       Array [
         Object {
           "text": Object {
-            "text": ":cloud: **It's 71℉**
-      Go outside!",
+            "text": ":cloud: *It's 71℉!*",
             "type": "mrkdwn",
           },
           "type": "section",

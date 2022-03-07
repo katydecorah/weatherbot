@@ -45,14 +45,13 @@ describe("post", () => {
           "blocks": Array [
             Object {
               "text": Object {
-                "text": ":cloud: **It's 71℉**
-      Go outside!",
+                "text": ":cloud: *It's 71℉!*",
                 "type": "mrkdwn",
               },
               "type": "section",
             },
           ],
-          "text": ":cloud: It's 71℉",
+          "text": ":cloud: It's 71℉!",
         },
       ]
     `);

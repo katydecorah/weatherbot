@@ -10,10 +10,9 @@ export default function checkItsNiceOut(current: Currently): Message {
       type: "section",
       text: {
         type: "mrkdwn",
-        text: `${getIcon(current.icon)} **It's ${Math.round(
+        text: `${getIcon(current.icon)} *It's ${Math.round(
           current.temperature
-        )}℉**
-Go outside!`,
+        )}℉!*`,
       },
     },
   ];
