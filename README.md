@@ -40,7 +40,7 @@ jobs:
     name: Weather
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Weather
         uses: katydecorah/weatherbot@v2.1.0
         with:
