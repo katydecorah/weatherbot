@@ -11233,8 +11233,8 @@ class Body {
 	 * @return  Promise
 	 */
 	async json() {
-		const buffer = await consumeBody(this);
-		return JSON.parse(buffer.toString());
+		const text = await this.text();
+		return JSON.parse(text);
 	}
 
 	/**
@@ -11244,7 +11244,7 @@ class Body {
 	 */
 	async text() {
 		const buffer = await consumeBody(this);
-		return buffer.toString();
+		return new TextDecoder().decode(buffer);
 	}
 
 	/**
@@ -13095,8 +13095,7 @@ function checkItsNiceOut(current) {
             type: "section",
             text: {
                 type: "mrkdwn",
-                text: `${getIcon(current.icon)} **It's ${Math.round(current.temperature)}℉**
-Go outside!`,
+                text: `${getIcon(current.icon)} *It's ${Math.round(current.temperature)}℉!*`,
             },
         },
     ];
