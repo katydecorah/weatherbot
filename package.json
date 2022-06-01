@@ -20,7 +20,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.7.0",
+    "@actions/core": "^1.8.2",
     "@slack/webhook": "^6.1.0",
     "node-fetch": "^3.2.4"
   },
