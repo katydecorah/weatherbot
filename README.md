@@ -50,12 +50,15 @@ jobs:
           SlackWebHookUrl: ${{ secrets.SlackWebHookUrl }}
 ```
 
-
 ## Action options
 
 - `Latitude`: Required. The latitude of where you want to return the weather.
+
 - `Longitude`: Required. The longitude of where you want to return the weather.
+
 - `DarkSkySecretKey`: Required. Your Dark Sky secrety key. Use a respository secret https://docs.github.com/en/actions/security-guides/encrypted-secrets
+
 - `SlackWebHookUrl`: Required. Your Slack webhook URL. Use a respository secret https://docs.github.com/en/actions/security-guides/encrypted-secrets
+
 - `Timezone`: Your timezone. Default: `America/New_York`.
 <!-- END GENERATED DOCUMENTATION -->
