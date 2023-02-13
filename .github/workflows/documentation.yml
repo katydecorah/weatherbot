@@ -1,26 +1,33 @@
 name: Document GitHub action
+
 on:
   push:
     paths:
-      - ".github/workflows/weather.yml"
+      - ".github/workflows/main.yml"
+      - ".github/workflows/documentation.yml"
       - "action.yml"
       - "package.json"
       - "README.md"
 
+permissions:
+  contents: write
+
 jobs:
-  document_action:
+  documentation:
     runs-on: macOS-latest
     name: Write documentation
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Documentation action
+        id: documentation
         uses: katydecorah/documentation-action@v1.1.1
         with:
-          exampleWorkflowFile: "weather.yml"
+          example-workflow-file: "weather.yml"
       - name: Commit files
-        if: env.UpdateDocumentation == 'true'
+        if: steps.documentation.outputs.update == 'true'
         run: |
+          git pull
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git commit -am "Update documentation"
