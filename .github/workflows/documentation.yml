@@ -3,7 +3,7 @@ name: Document GitHub action
 on:
   push:
     paths:
-      - ".github/workflows/main.yml"
+      - ".github/workflows/weather.yml"
       - ".github/workflows/documentation.yml"
       - "action.yml"
       - "package.json"
